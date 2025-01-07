@@ -72,6 +72,7 @@ const Blog = () => {
                                     excerpt={post.excerpt}
                                     date={post.date || post.created_at}
                                     tags={post.tags || []}
+                                    image_path={post.image_path}
                                 />
                             );
                         })}
