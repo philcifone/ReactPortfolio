@@ -6,7 +6,7 @@ import { Github, ExternalLink, FileText } from 'lucide-react';
 // ProjectCard component used in Work section
 // Updated ProjectCard component with link support
 const ProjectCard = ({ title, description, image, tags, githubUrl, liveUrl, pdfUrl }) => (
-  <div className="group relative overflow-hidden rounded-lg bg-[#2c2c2c] shadow-lg hover:shadow-xl transition-all duration-300">
+  <div className="group relative overflow-hidden rounded-lg bg-neutral-700 shadow-lg hover:shadow-xl transition-all duration-300">
     <div className="aspect-w-16 aspect-h-9">
       <img
         src={image}
@@ -62,7 +62,7 @@ const ProjectCard = ({ title, description, image, tags, githubUrl, liveUrl, pdfU
   
   // Work section component
   const Work = () => (
-    <section id="work" className="py-20 bg-[#2c2c2c]">
+    <section id="work" className="py-20 bg-neutral-800">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="text-4xl font-bold text-center mb-16 text-gray-200">Featured Work</h2>
         <div className="grid md:grid-cols-2 gap-8">

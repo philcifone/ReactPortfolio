@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import manayunkCar from '../images/manayunk-car.jpg';
 import mc102121 from '../images/MC1021-2-1.jpg'
+import mc101941 from '../images/MC1019-4-1.webp'
 
 const ImageModal = ({ image, onClose }) => (
   <div 
@@ -30,6 +31,7 @@ const Gallery = () => {
   const images = [
     { src: manayunkCar, alt: 'Manayunk Car' },
     { src: mc102121, alt: 'Manayunk at night'},
+    { src: mc101941, alt: 'Phonebooth in Wellsboro, Pennsylvania'},
     // Add other images in the same format
   ];
 
