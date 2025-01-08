@@ -1,5 +1,8 @@
-// server/index.js
+require('dotenv').config();  // This lets you use the .env file
 const express = require('express');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');   
+const authenticateToken = require('./middleware/auth');
 const multer = require('multer');
 const path = require('path');
 const db = require('./database');
@@ -53,7 +56,7 @@ app.get('/api/posts', (req, res) => {
   });
 });
 
-app.post('/api/posts', upload.single('image'), async (req, res) => {
+app.post('/api/posts', authenticateToken, upload.single('image'), async (req, res) => {
     console.log('=== Request received ===');
     console.log('Body:', req.body);
     console.log('File:', req.file);
@@ -175,7 +178,7 @@ app.post('/api/posts', upload.single('image'), async (req, res) => {
 
 
 // Delete a post
-app.delete('/api/posts/:id', async (req, res) => {
+app.delete('/api/posts/:id', authenticateToken, async (req, res) => {
     console.log('=== Delete Request received ===');
     console.log('Post ID:', req.params.id);
     
@@ -212,7 +215,7 @@ app.delete('/api/posts/:id', async (req, res) => {
   });
   
 // Update a post
-app.put('/api/posts/:id', upload.single('image'), async (req, res) => {
+app.put('/api/posts/:id', authenticateToken, upload.single('image'), async (req, res) => {
     console.log('=== Update Request received ===');
     console.log('Body:', req.body);
     console.log('File:', req.file);
@@ -315,6 +318,36 @@ app.put('/api/posts/:id', upload.single('image'), async (req, res) => {
 app.get('/*', function(req, res) {
   if (!req.path.startsWith('/api')) {
     res.sendFile(path.join(__dirname, '../public/index.html'));
+  }
+});
+
+// Auth Routes
+app.post('/api/login', async (req, res) => {
+  try {
+    const { username, password } = req.body;
+    
+    // Get user from database
+    db.get('SELECT * FROM users WHERE username = ?', [username], async (err, user) => {
+      if (err) {
+        return res.status(500).json({ error: 'Database error' });
+      }
+      
+      if (!user) {
+        return res.status(400).json({ error: 'User not found' });
+      }
+      
+      // Check password
+      const validPassword = await bcrypt.compare(password, user.password);
+      if (!validPassword) {
+        return res.status(400).json({ error: 'Invalid password' });
+      }
+      
+      // Create token
+      const token = jwt.sign({ id: user.id, username: user.username }, process.env.JWT_SECRET);
+      res.json({ token });
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 });
 

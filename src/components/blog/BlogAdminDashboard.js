@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Pencil, Trash2, Plus } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const BlogAdminDashboard = () => {
   const [posts, setPosts] = useState([]);
@@ -7,6 +8,13 @@ const BlogAdminDashboard = () => {
   const [selectedPost, setSelectedPost] = useState(null);
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [message, setMessage] = useState('');
+  const navigate = useNavigate();
+
+  // Authentication error handler
+  const handleAuthError = () => {
+    localStorage.removeItem('authToken');
+    navigate('/admin/login');
+  };
 
   // Fetch all posts on component mount
   useEffect(() => {
@@ -15,7 +23,23 @@ const BlogAdminDashboard = () => {
 
   const fetchPosts = async () => {
     try {
-      const response = await fetch('/api/posts');
+      const token = localStorage.getItem('authToken');
+      if (!token) {
+        handleAuthError();
+        return;
+      }
+
+      const response = await fetch('/api/posts', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (response.status === 401) {
+        handleAuthError();
+        return;
+      }
+
       const data = await response.json();
       setPosts(data);
     } catch (error) {
@@ -26,15 +50,27 @@ const BlogAdminDashboard = () => {
   const handleDelete = async (postId) => {
     if (window.confirm('Are you sure you want to delete this post?')) {
       try {
+        const token = localStorage.getItem('authToken');
+        if (!token) {
+          handleAuthError();
+          return;
+        }
+
         const response = await fetch(`/api/posts/${postId}`, {
           method: 'DELETE',
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
         });
         
-        console.log('Delete response status:', response.status);
+        if (response.status === 401) {
+          handleAuthError();
+          return;
+        }
         
         if (response.ok) {
           setMessage('Post deleted successfully');
-          await fetchPosts(); // Refresh the posts list
+          await fetchPosts();
         } else {
           const errorData = await response.json();
           console.error('Delete error response:', errorData);
@@ -50,6 +86,46 @@ const BlogAdminDashboard = () => {
   const handleEdit = (post) => {
     setSelectedPost(post);
     setIsEditing(true);
+  };
+
+  // Form submission handler with authentication
+  const handleFormSubmit = async (formData) => {
+    try {
+      const token = localStorage.getItem('authToken');
+      if (!token) {
+        handleAuthError();
+        return;
+      }
+
+      const url = isEditing ? `/api/posts/${selectedPost.id}` : '/api/posts';
+      const method = isEditing ? 'PUT' : 'POST';
+      
+      const response = await fetch(url, {
+        method,
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+        body: formData
+      });
+
+      if (response.status === 401) {
+        handleAuthError();
+        return;
+      }
+      
+      if (response.ok) {
+        setMessage(`Post ${isEditing ? 'updated' : 'created'} successfully`);
+        fetchPosts();
+        setShowCreateForm(false);
+        setIsEditing(false);
+        setSelectedPost(null);
+      } else {
+        const errorData = await response.json();
+        setMessage(`Error saving post: ${errorData.error || 'Unknown error'}`);
+      }
+    } catch (error) {
+      setMessage('Error: ' + error.message);
+    }
   };
 
   return (
@@ -142,30 +218,7 @@ const BlogAdminDashboard = () => {
             </h2>
             <BlogPostForm
               post={selectedPost}
-              onSubmit={async (formData) => {
-                // Handle form submission
-                try {
-                  const url = isEditing ? `/api/posts/${selectedPost.id}` : '/api/posts';
-                  const method = isEditing ? 'PUT' : 'POST';
-                  
-                  const response = await fetch(url, {
-                    method,
-                    body: formData
-                  });
-                  
-                  if (response.ok) {
-                    setMessage(`Post ${isEditing ? 'updated' : 'created'} successfully`);
-                    fetchPosts();
-                    setShowCreateForm(false);
-                    setIsEditing(false);
-                    setSelectedPost(null);
-                  } else {
-                    setMessage('Error saving post');
-                  }
-                } catch (error) {
-                  setMessage('Error: ' + error.message);
-                }
-              }}
+              onSubmit={handleFormSubmit}
               onCancel={() => {
                 setShowCreateForm(false);
                 setIsEditing(false);

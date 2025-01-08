@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
+// BlogAdmin.js
 const BlogAdmin = () => {
   const [formData, setFormData] = useState({
     title: '',
@@ -9,22 +11,19 @@ const BlogAdmin = () => {
     image: null
   });
   const [message, setMessage] = useState('');
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    fetch('/api/test')
-      .then(res => res.json())
-      .then(data => console.log('API Test Response:', data))
-      .catch(err => console.error('API Test Error:', err));
-  }, []);
+  const handleAuthError = () => {
+    localStorage.removeItem('authToken');
+    navigate('/admin/login');
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     
     const data = new FormData();
-    
-    // Add each field to FormData
     Object.keys(formData).forEach(key => {
-      if (formData[key]) { // Only add if value exists
+      if (formData[key]) {
         if (key === 'image') {
           data.append(key, formData[key]);
         } else {
@@ -34,19 +33,26 @@ const BlogAdmin = () => {
     });
 
     try {
-      console.log('Sending request to server...');
-      
-      // Use the full URL
-      const response = await fetch('http://localhost:3001/api/posts', {
+      const token = localStorage.getItem('authToken');
+      if (!token) {
+        handleAuthError();
+        return;
+      }
+
+      const response = await fetch('/api/posts', {
         method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
         body: data
       });
+
+      if (response.status === 401) {
+        handleAuthError();
+        return;
+      }
       
-      console.log('Response status:', response.status);
-      
-      // Get the raw response text first
       const rawResponse = await response.text();
-      console.log('Raw response:', rawResponse);
       
       if (response.ok) {
         const result = JSON.parse(rawResponse);
@@ -62,10 +68,9 @@ const BlogAdmin = () => {
         setMessage(`Error creating post: ${rawResponse}`);
       }
     } catch (error) {
-      console.error('Submit error:', error);
       setMessage('Error: ' + error.message);
     }
-};
+  };
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;

@@ -15,6 +15,8 @@ import Hero from './components/Hero';
 import Gallery from './components/Gallery';
 import BlogAdminDashboard from './components/blog/BlogAdminDashboard';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import AdminLogin from './components/AdminLogin';
+import ProtectedRoute from './components/ProtectedRoute';
 
 // Main portfolio component
 const Portfolio = ({ isDark, setIsDark }) => (
@@ -42,13 +44,25 @@ const App = () => {
             path="/" 
             element={<Portfolio isDark={isDark} setIsDark={setIsDark} />} 
           />
+          <Route     
+            path="/admin/login" 
+            element={<AdminLogin />} 
+          />
           <Route 
             path="/admin" 
-            element={<BlogAdmin />} 
+            element={
+              <ProtectedRoute>
+                <BlogAdmin />
+              </ProtectedRoute>
+            } 
           />
           <Route 
             path="/admin/dashboard" 
-            element={<BlogAdminDashboard />} 
+            element={
+              <ProtectedRoute>
+                <BlogAdminDashboard />
+              </ProtectedRoute>
+            } 
           />
           <Route 
             path="/blog/:id" 
