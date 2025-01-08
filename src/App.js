@@ -13,6 +13,7 @@ import BlogAdmin from './components/BlogAdmin';
 import BlogPostPage from './components/BlogPostPage';  // Import the new component
 import Hero from './components/Hero';
 import Gallery from './components/Gallery';
+import BlogAdminDashboard from './components/BlogAdminDashboard';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 
 // Main portfolio component
@@ -44,6 +45,10 @@ const App = () => {
           <Route 
             path="/admin" 
             element={<BlogAdmin />} 
+          />
+          <Route 
+            path="/admin/dashboard" 
+            element={<BlogAdminDashboard />} 
           />
           <Route 
             path="/blog/:id" 

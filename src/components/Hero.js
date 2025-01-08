@@ -15,9 +15,9 @@ const Hero = () => (
     {/* Content */}
     <div className="text-center space-y-6 p-4 relative z-10">
       <h1 className="text-5xl md:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-purple-400">
-        Creating Today,
+        Preserving Tomorrow,
         <br />
-        Preserving Tomorrow
+        Creating Today
       </h1>
       <p className="text-xl text-gray-200 max-w-2xl mx-auto">
         Digital Preservation Reimagined: Crafting Open Solutions for Tomorrow's Archives

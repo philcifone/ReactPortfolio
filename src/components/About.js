@@ -33,7 +33,7 @@ const About = () => (
         <SkillCard
           Icon={Camera}
           title="Visual Artist"
-          description="Capturing moments and creating digital art that tells stories."
+          description="Capturing moments and creating art that tells stories."
         />
         <SkillCard
           Icon={Code}
@@ -42,7 +42,7 @@ const About = () => (
         />
         <SkillCard
           Icon={Pen}
-          title="Writer"
+          title="Aspiring Writer"
           description="Crafting narratives across technical documentation and creative writing."
         />
         <SkillCard

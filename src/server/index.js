@@ -142,8 +142,7 @@ app.post('/api/posts', upload.single('image'), async (req, res) => {
     }
   });
 
-  // Add this route to your existing routes in index.js
-app.get('/api/posts/:id', (req, res) => {
+  app.get('/api/posts/:id', (req, res) => {
     const postId = req.params.id;
     
     db.get(`
@@ -172,6 +171,144 @@ app.get('/api/posts/:id', (req, res) => {
         tags: row.tags ? row.tags.split(',') : []
       });
     });
+  });
+
+
+// Delete a post
+app.delete('/api/posts/:id', async (req, res) => {
+    console.log('=== Delete Request received ===');
+    console.log('Post ID:', req.params.id);
+    
+    const postId = req.params.id;
+    
+    try {
+      // Delete post tags first
+      await new Promise((resolve, reject) => {
+        db.run('DELETE FROM post_tags WHERE post_id = ?', [postId], (err) => {
+          if (err) reject(err);
+          else resolve();
+        });
+      });
+  
+      // Then delete the post
+      await new Promise((resolve, reject) => {
+        db.run('DELETE FROM posts WHERE id = ?', [postId], (err) => {
+          if (err) reject(err);
+          else resolve();
+        });
+      });
+  
+      return res.status(200).json({
+        success: true,
+        message: 'Post deleted successfully'
+      });
+    } catch (error) {
+      console.error('Delete error:', error);
+      return res.status(500).json({
+        error: true,
+        message: error.message
+      });
+    }
+  });
+  
+// Update a post
+app.put('/api/posts/:id', upload.single('image'), async (req, res) => {
+    console.log('=== Update Request received ===');
+    console.log('Body:', req.body);
+    console.log('File:', req.file);
+    
+    try {
+      const postId = req.params.id;
+      const { title, content, excerpt, tags } = req.body;
+      const imagePath = req.file ? `/uploads/${req.file.filename}` : null;
+  
+      // Update the post first
+      const updateQuery = imagePath
+        ? 'UPDATE posts SET title = ?, content = ?, excerpt = ?, image_path = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?'
+        : 'UPDATE posts SET title = ?, content = ?, excerpt = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?';
+      
+      const updateParams = imagePath
+        ? [title, content, excerpt, imagePath, postId]
+        : [title, content, excerpt, postId];
+  
+      await new Promise((resolve, reject) => {
+        db.run(updateQuery, updateParams, function(err) {
+          if (err) reject(err);
+          else resolve();
+        });
+      });
+  
+      // Delete existing tags
+      await new Promise((resolve, reject) => {
+        db.run('DELETE FROM post_tags WHERE post_id = ?', [postId], (err) => {
+          if (err) reject(err);
+          else resolve();
+        });
+      });
+  
+      // Handle new tags if they exist
+      if (tags) {
+        console.log('Received tags:', tags);
+        // Handle both string and array formats
+        let tagArray;
+        try {
+          // First try to parse as JSON in case it's a stringified array
+          tagArray = typeof tags === 'string' ? tags.split(',') : tags;
+          console.log('Initial tag array:', tagArray);
+          
+          // Clean the tags
+          tagArray = tagArray
+            .map(tag => tag.trim())
+            .filter(tag => tag && !tag.includes('[') && !tag.includes(']'));
+          
+          console.log('Processed tag array:', tagArray);
+  
+          // Insert tags sequentially
+          for (const tag of tagArray) {
+            await new Promise((resolve, reject) => {
+              // First insert or get the tag
+              db.run('INSERT OR IGNORE INTO tags (name) VALUES (?)', [tag], function(err) {
+                if (err) {
+                  reject(err);
+                  return;
+                }
+                
+                // Get the tag_id whether it was just inserted or already existed
+                db.get('SELECT id FROM tags WHERE name = ?', [tag], (err, row) => {
+                  if (err) {
+                    reject(err);
+                    return;
+                  }
+                  
+                  // Use INSERT OR IGNORE for the post_tags relation
+                  db.run('INSERT OR IGNORE INTO post_tags (post_id, tag_id) VALUES (?, ?)',
+                    [postId, row.id], (err) => {
+                      if (err) reject(err);
+                      else resolve();
+                    });
+                });
+              });
+            });
+          }
+        } catch (error) {
+          console.error('Error processing tags:', error);
+          // Continue with the update even if tag processing fails
+        }
+      }
+  
+      return res.status(200).json({
+        success: true,
+        message: 'Post updated successfully',
+        postId: postId
+      });
+      
+    } catch (error) {
+      console.error('Update error:', error);
+      return res.status(500).json({
+        error: true,
+        message: error.message
+      });
+    }
   });
 
 // Handle React Router by sending all non-API routes to index.html

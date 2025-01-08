@@ -75,7 +75,7 @@ const ProjectCard = ({ title, description, image, tags, githubUrl, liveUrl, pdfU
           />
           <ProjectCard
             title="Future Proofing a Photographers Legacy"
-            description="Case study on a cloud backup solution to protect a lifetime of celebrated images."
+            description="Backblaze case study on a cloud migration I spearheaded in order to protect a lifetime of celebrated images by a renowned photographer."
             image={backblaze}
             pdfUrl={() => window.open('_blank')}
             tags={["Backups", "Archive", "Photography"]}
