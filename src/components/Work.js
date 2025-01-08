@@ -2,22 +2,17 @@ import React from 'react';
 import libaraxiaAlpha from '../images/libaraxiaAlpha.png';
 import backblaze from '../images/BLZE.png';
 import { ProjectCard, ColorPaletteDemo } from './InteractiveProjectCard';
+import RockPaperScissors from './RockPaperScissors';
+import WordGame from './WordGame'
+import DicewareGenerator from './DicewareGenerator';
 
 const Work = () => {
   return (
     <section id="work" className="py-20 bg-neutral-800">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="text-4xl font-bold text-center mb-16 text-gray-200">
-          Featured Work
+          Projects, both large and small!
         </h2>
-
-        <div className="space-y-16">
-          {/* Color Palette Generator */}
-          <div className="max-w-4xl mx-auto"
-                        title="Random Color Palette Generator" 
->
-            <ColorPaletteDemo/>
-          </div>
 
           {/* Other Projects */}
           <div className="grid md:grid-cols-2 gap-8">
@@ -35,6 +30,28 @@ const Work = () => {
               pdfUrl="https://f001.backblazeb2.com/file/backblaze-b2-case-studies/CS_Steve_McCurry_Studios.pdf"
               tags={["Backups", "Archive", "Photography"]}
             />
+          </div>
+          <br/>
+        <h3 className="text-2xl font-bold text-center mb-8 mt-16 text-gray-200">
+          Please enjoy these tools and games!
+        </h3>
+
+        <div className="space-y-16">
+          {/* Color Palette Generator */}
+          <div className="max-w-4xl mx-auto">
+            <ColorPaletteDemo/>
+          </div>
+
+          <div className="max-w-4xl mx-auto">
+            <DicewareGenerator/>
+          </div>
+
+          <div className="max-w-4xl mx-auto">
+            <WordGame/>
+          </div>
+
+          <div className="max-w-4xl mx-auto">
+            <RockPaperScissors/>
           </div>
         </div>
       </div>
