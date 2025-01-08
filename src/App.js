@@ -8,12 +8,12 @@ import React, { useState, useEffect } from 'react';
 import { useTheme } from './useTheme';
 import { Navigation } from './components/Navigation';
 import About from './components/About';
-import Blog from './components/Blog';
-import BlogAdmin from './components/BlogAdmin';
-import BlogPostPage from './components/BlogPostPage';  // Import the new component
+import Blog from './components/blog/Blog';
+import BlogAdmin from './components/blog/BlogAdmin';
+import BlogPostPage from './components/blog/BlogPostPage';  // Import the new component
 import Hero from './components/Hero';
 import Gallery from './components/Gallery';
-import BlogAdminDashboard from './components/BlogAdminDashboard';
+import BlogAdminDashboard from './components/blog/BlogAdminDashboard';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 
 // Main portfolio component

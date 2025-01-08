@@ -13,7 +13,7 @@ const SkillCard = ({ Icon, title, description }) => (
 const About = () => (
   <section 
     id="about" 
-    className="py-20 bg-cover bg-center relative"
+    className="py-20 bg-cover bg-center md:bg-center relative"
     style={{ backgroundImage: `url(${backgroundImage})` }}
   >
     <div className="absolute inset-0 bg-black/50"></div>
