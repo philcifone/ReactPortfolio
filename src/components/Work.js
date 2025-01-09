@@ -32,9 +32,12 @@ const Work = () => {
             />
           </div>
           <br/>
-        <h3 className="text-2xl font-bold text-center mb-8 mt-16 text-gray-200">
-          Please enjoy these tools and games!
+        <h3 className="text-2xl font-bold text-center mb-4 mt-16 text-gray-200">
+          Take a load off,
         </h3>
+        <p className="text-xl font-bold text-center mb-8 mt-0 text-gray-200">
+          enjoy these tools and games!
+          </p>
 
         <div className="space-y-16">
           {/* Color Palette Generator */}
