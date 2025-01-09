@@ -14,12 +14,12 @@ const Hero = () => (
     
     {/* Content */}
     <div className="text-center space-y-6 p-4 relative z-10">
-      <h1 className="text-5xl md:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-purple-400">
+      <h1 className="font-display text-5xl md:text-7xl bg-clip-text text-transparent p-8 bg-gradient-to-r from-green-400 to-purple-400">
         Preserving Tomorrow,
         <br />
         Creating Today
       </h1>
-      <p className="text-xl text-gray-200 max-w-2xl mx-auto">
+      <p className="font-sans text-xl text-gray-200 max-w-2xl mx-auto">
         Digital Preservation Reimagined: Crafting Open Solutions for Tomorrow's Archives
       </p>
       <a href="#about" className="inline-block animate-bounce mt-8">

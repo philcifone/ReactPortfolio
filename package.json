@@ -4,6 +4,8 @@
   "private": true,
   "proxy": "http://localhost:3001",
   "dependencies": {
+    "@fontsource/merriweather": "^5.1.1",
+    "@fontsource/montserrat": "^5.1.1",
     "axios": "^1.7.9",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
