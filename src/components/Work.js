@@ -5,6 +5,7 @@ import { ProjectCard, ColorPaletteDemo } from './InteractiveProjectCard';
 import RockPaperScissors from './RockPaperScissors';
 import WordGame from './WordGame'
 import DicewareGenerator from './DicewareGenerator';
+import StorageCalculator from './StorageCalculator';
 
 const Work = () => {
   return (
@@ -40,7 +41,11 @@ const Work = () => {
           </p>
 
         <div className="space-y-16">
-          {/* Color Palette Generator */}
+          
+          <div className="max-w-4xl mx-auto">
+            <StorageCalculator/>
+          </div>
+
           <div className="max-w-4xl mx-auto">
             <ColorPaletteDemo/>
           </div>
