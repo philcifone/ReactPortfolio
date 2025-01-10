@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, X } from 'lucide-react';
-import manayunkCar from '../images/manayunk-car.jpg';
+import manayunkCar from '../images/gallery/manayunk-car.jpg';
 import mc102121 from '../images/MC1021-2-1.jpg';
 import mc101941 from '../images/MC1019-4-1.webp';
 

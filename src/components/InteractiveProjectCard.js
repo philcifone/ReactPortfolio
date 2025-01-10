@@ -352,6 +352,52 @@ const ColorPaletteDemo = () => {
       )}
     </div>
   );
+  const copyFullPalette = () => {
+    // Format the palette as a string
+    const paletteData = colors
+      .slice(0, numColors)
+      .map((color, index) => {
+        const formattedColor =
+          format === 'hex'
+            ? (color.startsWith('rgb') ? rgbToHex(color) : color)
+            : (color.startsWith('#') ? hexToRgb(color) : color);
+        return `${index + 1}: ${formattedColor}`;
+      })
+      .join('\n');
+
+    // Copy to clipboard
+    navigator.clipboard.writeText(paletteData)
+      .then(() => {
+        setShowAlert(true);
+        setTimeout(() => setShowAlert(false), 2000);
+      })
+      .catch(err => {
+        console.error('Failed to copy palette:', err);
+      });
+  };
+
+  return (
+    <div className="p-6 bg-neutral-800 rounded-lg">
+      {/* ... existing components ... */}
+      
+      {/* Copy Full Palette */}
+      <div className="text-center mt-6">
+        <button
+          onClick={copyFullPalette}
+          className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded"
+        >
+          Copy Full Palette
+        </button>
+        {showAlert && (
+          <div className="mt-2 text-sm text-green-500">
+            Palette copied to clipboard!
+          </div>
+        )}
+      </div>
+
+      {/* ... existing components ... */}
+    </div>
+  );
 };
 
 const ProjectCard = ({ title, description, image, tags, githubUrl, liveUrl, pdfUrl }) => {
