@@ -8,33 +8,25 @@ import mc101941 from '../images/MC1019-4-1.webp';
 const GALLERY_DATA = {
   night: [
     { src: mc102121, alt: 'Manayunk at night', caption: 'SAMPLE CAPTION REPLACE' },
-    { src: manayunkCar, alt: 'Sample night photo 2', caption: 'SAMPLE CAPTION REPLACE' },
   ],
   'keystone-dreams': [
     { src: mc101941, alt: 'Phonebooth in Wellsboro', caption: 'SAMPLE CAPTION REPLACE' },
     { src: manayunkCar, alt: 'Sample keystone photo 2', caption: 'SAMPLE CAPTION REPLACE' },
   ],
   live: [
-    { src: manayunkCar, alt: 'Sample live photo 1', caption: 'SAMPLE CAPTION REPLACE' },
-    { src: mc102121, alt: 'Sample live photo 2', caption: 'SAMPLE CAPTION REPLACE' },
+
   ],
   'in-transit': [
-    { src: mc101941, alt: 'Sample transit photo 1', caption: 'SAMPLE CAPTION REPLACE' },
-    { src: manayunkCar, alt: 'Sample transit photo 2', caption: 'SAMPLE CAPTION REPLACE' },
-    { src: mc102121, alt: 'Sample live photo 2', caption: 'SAMPLE CAPTION REPLACE' },
 
   ],
   street: [
-    { src: mc102121, alt: 'Sample live photo 2', caption: 'SAMPLE CAPTION REPLACE' },
-    { src: mc102121, alt: 'Sample street photo 2', caption: 'SAMPLE CAPTION REPLACE' },
+
   ],
   people: [
-    { src: mc101941, alt: 'Sample people photo 1', caption: 'SAMPLE CAPTION REPLACE' },
-    { src: manayunkCar, alt: 'Sample people photo 2', caption: 'SAMPLE CAPTION REPLACE' },
+
   ],
   'on-the-edge': [
-    { src: mc102121, alt: 'Sample edge photo 1', caption: 'SAMPLE CAPTION REPLACE' },
-    { src: manayunkCar, alt: 'Sample edge photo 2', caption: 'SAMPLE CAPTION REPLACE' },
+
   ],
 };
 
