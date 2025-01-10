@@ -94,10 +94,9 @@ const ColorPaletteDemo = () => {
     
     const [h, s, l] = rgbToHsl(...rgbValues);
     let harmonicColors = [];
-
+  
     switch (harmonyMode) {
       case 'analogous':
-        // Generate colors with hues 30° apart
         harmonicColors = [
           hslToRgb(h - 60, s, l),
           hslToRgb(h - 30, s, l),
@@ -108,7 +107,6 @@ const ColorPaletteDemo = () => {
         break;
       
       case 'complementary':
-        // Generate a complementary color (180° opposite) and variations
         const comp = (h + 180) % 360;
         harmonicColors = [
           hslToRgb(h, s, l),
@@ -120,7 +118,6 @@ const ColorPaletteDemo = () => {
         break;
       
       case 'triadic':
-        // Generate colors 120° apart
         harmonicColors = [
           hslToRgb(h, s, l),
           hslToRgb((h + 120) % 360, s, l),
@@ -129,13 +126,17 @@ const ColorPaletteDemo = () => {
           hslToRgb((h + 120) % 360, s * 0.8, l * 1.1)
         ];
         break;
-      
+  
       default:
         harmonicColors = Array(5).fill(0).map(() => generateRandomColor());
     }
-
-    return harmonicColors.slice(0, numColors);
+  
+    // Convert to selected format
+    return harmonicColors.slice(0, numColors).map(color => {
+      return format === 'hex' ? rgbToHex(color) : color;
+    });
   };
+  
 
   const generateNewColors = () => {
     if (harmonyMode === 'random') {
