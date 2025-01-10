@@ -27,3 +27,9 @@ src/server/uploads/
 *.db
 
 src/server/scripts/
+
+# Images
+src/images/**/*.jpg
+src/images/**/*.jpeg
+src/images/**/*.webp
+src/images/**/*.png

@@ -1,34 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, X } from 'lucide-react';
-import manayunkCar from '../images/gallery/manayunk-car.jpg';
-import mc102121 from '../images/MC1021-2-1.jpg';
-import mc101941 from '../images/MC1019-4-1.webp';
-
-// Sample image data structure - replace with your actual images
-const GALLERY_DATA = {
-  night: [
-    { src: mc102121, alt: 'Manayunk at night', caption: 'SAMPLE CAPTION REPLACE' },
-  ],
-  'keystone-dreams': [
-    { src: mc101941, alt: 'Phonebooth in Wellsboro', caption: 'SAMPLE CAPTION REPLACE' },
-    { src: manayunkCar, alt: 'Sample keystone photo 2', caption: 'SAMPLE CAPTION REPLACE' },
-  ],
-  live: [
-
-  ],
-  'in-transit': [
-
-  ],
-  street: [
-
-  ],
-  people: [
-
-  ],
-  'on-the-edge': [
-
-  ],
-};
+import { loadGalleryImages } from './imageLoader';
 
 const ImageModal = ({ image, onClose, onNext, onPrev, hasNext, hasPrev }) => (
   <div 
@@ -158,11 +130,17 @@ const ParallaxImage = React.memo(({ src, alt, onClick, className }) => {
 });
 
 const Gallery = () => {
+  const [galleryData, setGalleryData] = useState({});
   const [activeCategory, setActiveCategory] = useState('night');
   const [selectedImage, setSelectedImage] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isChanging, setIsChanging] = useState(false);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
+  // Load images when component mounts
+  useEffect(() => {
+    const images = loadGalleryImages();
+    setGalleryData(images);
+  }, []);
 
   const categories = [
     { id: 'night', label: 'Night' },
@@ -171,7 +149,7 @@ const Gallery = () => {
     { id: 'in-transit', label: 'In Transit' },
     { id: 'street', label: 'Street' },
     { id: 'people', label: 'People' },
-    { id: 'on-the-edge', label: 'On the Edge of the Earth' },
+    { id: 'oteote', label: 'On the Edge of the Earth' }
   ];
 
   const handleCategoryChange = (categoryId) => {
@@ -189,9 +167,8 @@ const Gallery = () => {
     setCurrentImageIndex(index);
   };
 
-  // Navigation handlers remain the same
   const handleNext = () => {
-    const currentCategoryImages = GALLERY_DATA[activeCategory];
+    const currentCategoryImages = galleryData[activeCategory];
     if (currentImageIndex < currentCategoryImages.length - 1) {
       setCurrentImageIndex(currentImageIndex + 1);
       setSelectedImage(currentCategoryImages[currentImageIndex + 1]);
@@ -199,7 +176,7 @@ const Gallery = () => {
   };
 
   const handlePrev = () => {
-    const currentCategoryImages = GALLERY_DATA[activeCategory];
+    const currentCategoryImages = galleryData[activeCategory];
     if (currentImageIndex > 0) {
       setCurrentImageIndex(currentImageIndex - 1);
       setSelectedImage(currentCategoryImages[currentImageIndex - 1]);
@@ -209,7 +186,7 @@ const Gallery = () => {
   return (
     <section id="gallery" className="py-20 bg-neutral-900">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h2 className="text-4xl font-bold text-center mb-16 text-gray-200">
+        <h2 className="text-4xl font-bold text-center mb-16 text-gray-200">
           <span className="inline-block transform transition-all duration-500 hover:scale-105 hover:text-green-400">
             Photography
           </span>
@@ -237,7 +214,7 @@ const Gallery = () => {
             ${isChanging ? 'opacity-0' : 'opacity-100'}
           `}
         >
-          {GALLERY_DATA[activeCategory].map((image, index) => (
+          {galleryData[activeCategory]?.map((image, index) => (
             <ParallaxImage
               key={index}
               src={image.src}
@@ -249,7 +226,7 @@ const Gallery = () => {
         </div>
       </div>
 
-      {/* Modal remains the same */}
+      {/* Modal */}
       {selectedImage && (
         <ImageModal 
           image={selectedImage}
@@ -259,7 +236,7 @@ const Gallery = () => {
           }}
           onNext={handleNext}
           onPrev={handlePrev}
-          hasNext={currentImageIndex < GALLERY_DATA[activeCategory].length - 1}
+          hasNext={currentImageIndex < (galleryData[activeCategory]?.length || 0) - 1}
           hasPrev={currentImageIndex > 0}
         />
       )}
