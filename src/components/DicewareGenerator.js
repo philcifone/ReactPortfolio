@@ -9,17 +9,36 @@ const DicewareGenerator = () => {
   const [numWords, setNumWords] = useState(5);
   const [copied, setCopied] = useState(false);
   const [entropy, setEntropy] = useState(0);
+  const [wordLengthStats, setWordLengthStats] = useState({});
 
   useEffect(() => {
     const loadWords = async () => {
       setLoading(true);
       try {
-        // We'll use 5-letter words for consistency
-        const words = await fetchWordList(5);
-        setWordList(words);
-        generatePassword(words, numWords);
+        // Load words of different lengths
+        const words4 = await fetchWordList(4);
+        const words5 = await fetchWordList(5);
+        const words6 = await fetchWordList(6);
+        const words7 = await fetchWordList(7);
+        const words8 = await fetchWordList(8);
+        
+        const combinedList = [...words4, ...words5, ...words6, ...words7, ...words8];
+        
+        // Calculate statistics for the info panel
+        const stats = {
+          4: words4.length,
+          5: words5.length,
+          6: words6.length,
+          7: words7.length,
+          8: words8.length,
+          total: combinedList.length
+        };
+        
+        setWordList(combinedList);
+        setWordLengthStats(stats);
+        generatePassword(combinedList, numWords);
       } catch (error) {
-        console.error('Error loading word list:', error);
+        console.error('Error loading word lists:', error);
       } finally {
         setLoading(false);
       }
@@ -71,7 +90,7 @@ const DicewareGenerator = () => {
     return (
       <div className="bg-neutral-800 rounded-lg p-6">
         <div className="text-center text-gray-200">
-          <p>Loading word list...</p>
+          <p>Loading word lists...</p>
         </div>
       </div>
     );
