@@ -41,13 +41,13 @@ const Work = () => {
         return (
           <div className="space-y-16">
             <div className="max-w-4xl mx-auto">
-              <StorageCalculator />
-            </div>
-            <div className="max-w-4xl mx-auto">
               <ColorPaletteDemo />
             </div>
             <div className="max-w-4xl mx-auto">
               <DicewareGenerator />
+            </div>
+            <div className="max-w-4xl mx-auto">
+              <StorageCalculator />
             </div>
           </div>
         );
