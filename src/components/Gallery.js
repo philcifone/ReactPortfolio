@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, X } from 'lucide-react';
 import { loadGalleryImages } from './imageLoader';
+import AnimatedHeading from './AnimatedHeading';
 
 const ImageModal = ({ image, onClose, onNext, onPrev, hasNext, hasPrev }) => (
   <div 
@@ -186,11 +187,7 @@ const Gallery = () => {
   return (
     <section id="gallery" className="py-20 bg-neutral-900">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-4xl font-bold text-center mb-16 text-gray-200">
-          <span className="inline-block transform transition-all duration-500 hover:scale-105 hover:text-green-400">
-            Photography
-          </span>
-        </h2>
+      <AnimatedHeading text="Photography" />
         
         {/* Category Tabs with new design */}
         <div className="mb-12 border-b border-neutral-800">
