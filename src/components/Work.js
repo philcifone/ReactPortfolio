@@ -1,73 +1,109 @@
 import React, { useState } from 'react';
 import libaraxiaAlpha from '../images/libaraxiaAlpha.png';
 import backblaze from '../images/BLZE.png';
-import { ProjectCard, ColorPaletteDemo } from './InteractiveProjectCard';
+import { ProjectCard } from './InteractiveProjectCard';
 import RockPaperScissors from './RockPaperScissors';
-import WordGame from './WordGame'
+import WordGame from './WordGame';
 import DicewareGenerator from './DicewareGenerator';
 import StorageCalculator from './StorageCalculator';
 import HangmanGame from './Hangman';
+import CocktailFinder from './CocktailFinder';
+import { ColorPaletteDemo } from './InteractiveProjectCard';
 
-// Tab management component
-const TabView = ({ activeTab, setActiveTab, tabs }) => (
-  <div className="flex gap-2 mb-8">
-    {tabs.map((tab) => (
-      <button
-        key={tab.id}
-        onClick={() => setActiveTab(tab.id)}
-        className={`flex-1 py-3 rounded-lg transition-colors ${
-          activeTab === tab.id
-            ? 'bg-blue-600 text-white'
-            : 'bg-neutral-700 text-gray-300 hover:bg-neutral-600'
-        }`}
-      >
-        {tab.label}
-      </button>
-    ))}
-  </div>
+const TabButton = ({ isActive, onClick, children }) => (
+  <button
+    onClick={onClick}
+    className={`px-4 py-2 rounded-lg transition-colors ${
+      isActive
+        ? 'bg-blue-600 text-white'
+        : 'bg-neutral-700 text-gray-300 hover:bg-neutral-600'
+    }`}
+  >
+    {children}
+  </button>
+);
+
+const SubTabButton = ({ isActive, onClick, children }) => (
+  <button
+    onClick={onClick}
+    className={`px-3 py-1 text-sm rounded-md transition-colors ${
+      isActive
+        ? 'bg-green-600 text-white'
+        : 'bg-neutral-600 text-gray-300 hover:bg-neutral-500'
+    }`}
+  >
+    {children}
+  </button>
 );
 
 const Work = () => {
-  const [activeToolsTab, setActiveToolsTab] = useState('utilities');
-  
-  const toolsTabs = [
+  const [activeToolType, setActiveToolType] = useState('utilities');
+  const [activeUtility, setActiveUtility] = useState('colorPalette');
+  const [activeGame, setActiveGame] = useState('wordGame');
+
+  const toolTypes = [
     { id: 'utilities', label: 'Utilities' },
     { id: 'games', label: 'Games' }
   ];
 
-  const renderToolsContent = () => {
-    switch (activeToolsTab) {
-      case 'utilities':
-        return (
-          <div className="space-y-16">
-            <div className="max-w-4xl mx-auto">
-              <ColorPaletteDemo />
-            </div>
-            <div className="max-w-4xl mx-auto">
-              <DicewareGenerator />
-            </div>
-            <div className="max-w-4xl mx-auto">
-              <StorageCalculator />
-            </div>
-          </div>
-        );
-      case 'games':
-        return (
-          <div className="space-y-16">
-            <div className="max-w-4xl mx-auto">
-              <WordGame />
-            </div>
-            <div className="max-w-4xl mx-auto">
-              <RockPaperScissors />
-            </div>
-            <div className="max-w-4xl mx-auto">
-              <HangmanGame />
-            </div>
-          </div>
-        );
-      default:
-        return null;
-    }
+  const utilities = [
+    { id: 'colorPalette', label: 'Color Palette', component: ColorPaletteDemo },
+    { id: 'diceware', label: 'Password Generator', component: DicewareGenerator },
+    { id: 'storage', label: 'Storage Calculator', component: StorageCalculator },
+    { id: 'cocktails', label: 'Cocktail Finder', component: CocktailFinder }
+  ];
+
+  const games = [
+    { id: 'wordGame', label: 'Word Game', component: WordGame },
+    { id: 'rps', label: 'Rock Paper Scissors', component: RockPaperScissors },
+    { id: 'hangman', label: 'Hangman', component: HangmanGame }
+  ];
+
+  const renderInteractiveContent = () => {
+    const currentItems = activeToolType === 'utilities' ? utilities : games;
+    const activeItemId = activeToolType === 'utilities' ? activeUtility : activeGame;
+    const ActiveComponent = currentItems.find(item => item.id === activeItemId)?.component;
+
+    return (
+      <div className="space-y-8">
+        {/* Tool type tabs */}
+        <div className="flex justify-center gap-4">
+          {toolTypes.map(type => (
+            <TabButton
+              key={type.id}
+              isActive={activeToolType === type.id}
+              onClick={() => setActiveToolType(type.id)}
+            >
+              {type.label}
+            </TabButton>
+          ))}
+        </div>
+
+        {/* Sub-tabs */}
+        <div className="flex justify-center gap-2 flex-wrap">
+          {currentItems.map(item => (
+            <SubTabButton
+              key={item.id}
+              isActive={activeItemId === item.id}
+              onClick={() => {
+                if (activeToolType === 'utilities') {
+                  setActiveUtility(item.id);
+                } else {
+                  setActiveGame(item.id);
+                }
+              }}
+            >
+              {item.label}
+            </SubTabButton>
+          ))}
+        </div>
+
+        {/* Active component */}
+        <div className="max-w-4xl mx-auto">
+          {ActiveComponent && <ActiveComponent />}
+        </div>
+      </div>
+    );
   };
 
   return (
@@ -105,13 +141,7 @@ const Work = () => {
             Explore these utilities and games - take a break, have some fun!
           </p>
 
-          <TabView 
-            activeTab={activeToolsTab}
-            setActiveTab={setActiveToolsTab}
-            tabs={toolsTabs}
-          />
-
-          {renderToolsContent()}
+          {renderInteractiveContent()}
         </div>
       </div>
     </section>

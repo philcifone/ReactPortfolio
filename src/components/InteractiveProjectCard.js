@@ -110,10 +110,10 @@ const ColorPaletteDemo = () => {
         const comp = (h + 180) % 360;
         harmonicColors = [
           hslToRgb(h, s, l),
-          hslToRgb(h, s * 0.8, l * 1.1),
-          hslToRgb(h, s * 0.6, l * 1.2),
           hslToRgb(comp, s, l),
-          hslToRgb(comp, s * 0.8, l * 1.1)
+          hslToRgb(comp, s * 0.8, l * 1.1),
+          hslToRgb(h, s * 0.8, l * 1.1),
+          hslToRgb(h, s * 0.6, l * 1.2)
         ];
         break;
       
