@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Archive, Terminal, Camera, Code, Pen, BookOpen } from 'lucide-react';
 import backgroundImage from '../images/ME-0741.jpg';
+import vb10294 from '../images/vb10294.webp'
 
 const SkillCard = ({ Icon, title, description }) => {
   const [mousePosition, setMousePosition] = useState({ x: 50, y: 50 });
@@ -14,7 +15,7 @@ const SkillCard = ({ Icon, title, description }) => {
 
   return (
     <div 
-      className="group relative p-6 space-y-4 bg-neutral-800/80 rounded-lg hover:transform hover:scale-105 transition-all duration-300 overflow-hidden"
+      className="group relative p-6 space-y-4 bg-neutral-800/60 rounded-lg hover:transform hover:scale-105 transition-all duration-300 overflow-hidden"
       onMouseMove={handleMouseMove}
     >
       {/* Holographic background effect */}
@@ -58,7 +59,7 @@ const About = () => (
   <section 
     id="about" 
     className="py-20 bg-cover bg-center md:bg-center relative"
-    style={{ backgroundImage: `url(${backgroundImage})` }}
+    style={{ backgroundImage: `url(${vb10294})` }}
   >
     {/* Background overlay */}
     <div className="absolute inset-0 bg-black/50"></div>
@@ -83,19 +84,19 @@ const About = () => (
           description="Command line warrior, open-source advocate, and system tinkerer extraordinaire."
         />
         <SkillCard
-          Icon={Code}
-          title="Amateur Programmer"
-          description="Building tools and solving problems with code, one bug at a time."
-        />
-        <SkillCard
           Icon={Pen}
-          title="Aspiring Writer"
+          title="Writer"
           description="Crafting narratives across technical documentation and creative writing."
         />
         <SkillCard
           Icon={BookOpen}
           title="Lifelong Learner"
           description="Constantly exploring the intersection of technology, literature, art, and preservation."
+        />
+        <SkillCard
+          Icon={Code}
+          title="Amateur Programmer"
+          description="Building tools and solving problems with code, one bug at a time."
         />
       </div>
     </div>

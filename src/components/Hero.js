@@ -1,12 +1,13 @@
 import React from 'react';
 import { ChevronDown } from 'lucide-react';
 import mc102121 from '../images/MC1021-2-1.jpg'
+import vb10282 from '../images/vb10282.webp'
 
 const Hero = () => (
   <div 
     className="min-h-screen flex items-center justify-center bg-cover bg-center bg-no-repeat relative"
     style={{
-        backgroundImage: `url(${mc102121})`,
+        backgroundImage: `url(${vb10282})`,
       }}
   >
     {/* Overlay */}

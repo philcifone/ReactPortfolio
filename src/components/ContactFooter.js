@@ -159,7 +159,7 @@ const ContactForm = () => {
                 <p className="text-green-400 text-center">Message sent successfully!</p>
               )}
               {status === 'error' && (
-                <p className="text-red-400 text-center">Failed to send message. Please try again.</p>
+                <p className="text-red-400 text-center">Sorry! Not in use yet. Please use adjacent links.</p>
               )}
             </form>
           </div>
