@@ -2,7 +2,7 @@ import {
   Camera, Code, Pen, ChevronDown, Github, Mail, Linkedin,
   Terminal, Archive, Sun, Moon, BookOpen
 } from 'lucide-react';
-import Work from './components/Work';
+import Work from './components/projects/Work';
 import { Contact, Footer } from './components/ContactFooter';
 import React, { useState, useEffect } from 'react';
 import { useTheme } from './useTheme';

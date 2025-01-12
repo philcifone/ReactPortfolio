@@ -48,8 +48,8 @@ const SkillCard = ({ Icon, title, description }) => {
       </div>
 
       {/* Content */}
-      <h3 className="relative z-10 text-xl font-semibold text-gray-200">{title}</h3>
-      <p className="relative z-10 text-gray-400">{description}</p>
+      <h3 className="relative z-10 text-xl font-display font-semibold text-gray-200">{title}</h3>
+      <p className="relative z-10 font-sans font-medium text-gray-400">{description}</p>
     </div>
   );
 };
@@ -65,7 +65,7 @@ const About = () => (
 
     {/* Content */}
     <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h2 className="text-4xl font-bold text-center mb-16 text-gray-200">whoami?</h2>
+      <h2 className="text-4xl font-display font-bold text-center mb-16 text-gray-200">whoami?</h2>
       <div className="grid md:grid-cols-3 gap-8">
         <SkillCard
           Icon={Archive}

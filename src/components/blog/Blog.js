@@ -41,7 +41,7 @@ const Blog = () => {
         return (
             <section id="blog" className="py-20 bg-neutral-700">
                 <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <h2 className="text-4xl font-bold text-center mb-16 text-gray-200">
+                    <h2 className="text-4xl font-display font-bold text-center mb-16 text-gray-200">
                         Latest Writings
                     </h2>
                     <p className="text-center text-gray-200">Loading posts...</p>
@@ -53,7 +53,7 @@ const Blog = () => {
     return (
         <section id="blog" className="py-20 bg-neutral-700">
             <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-                <h2 className="text-4xl font-bold text-center mb-16 text-gray-200">
+                <h2 className="text-4xl font-display font-bold text-center mb-16 text-gray-200">
                     Latest Writings
                 </h2>
                 {error ? (

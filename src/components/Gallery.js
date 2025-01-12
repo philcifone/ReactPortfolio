@@ -78,8 +78,8 @@ const CategoryTab = ({ category, isActive, onClick }) => (
     {/* Active indicator - slides in from left */}
     <span
       className={`
-        absolute bottom-0 left-0 h-0.5 bg-green-500
-        transition-all duration-300 ease-out
+        absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-kelly-green to-light-olive
+        transition-all duration-200 ease-out
         ${isActive ? 'w-full' : 'w-0'}
       `}
     />
@@ -87,8 +87,8 @@ const CategoryTab = ({ category, isActive, onClick }) => (
     {/* Hover indicator - grows from center */}
     <span
       className={`
-        absolute bottom-0 left-1/2 h-0.5 bg-green-400 opacity-0
-        transition-all duration-300 ease-out -translate-x-1/2
+        absolute bottom-0 left-1/2 h-0.5 bg-gradient-to-r from-light-olive to-kelly-green opacity-0
+        transition-all duration-500 ease-out -translate-x-1/2
         group-hover:opacity-100 group-hover:w-full w-0
         ${isActive ? 'opacity-0' : ''}
       `}
@@ -108,7 +108,7 @@ const ParallaxImage = React.memo(({ src, alt, onClick, className }) => {
       const scrollPercent = Math.max(0, Math.min(1, 
         (window.innerHeight - rect.top) / (window.innerHeight + rect.height)
       ));
-      setOffset(scrollPercent * 20); // 20px maximum parallax offset
+      setOffset(scrollPercent * 0); // 20px maximum parallax offset
     };
 
     window.addEventListener('scroll', handleScroll);

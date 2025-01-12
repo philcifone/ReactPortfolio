@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Github, ExternalLink, FileText, Lock, Unlock, Copy, Check, Palette, Hash, } from 'lucide-react';
-import { Alert, AlertDescription } from './ui/alert';
+import { Alert, AlertDescription } from '../ui/alert';
 
 const ColorPaletteDemo = () => {
   const [numColors, setNumColors] = useState(5);

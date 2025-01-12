@@ -85,7 +85,7 @@ const BlogPostPage = () => {
       <article className="w-full max-w-4xl mx-auto px-4 py-8">
         {/* Header Section */}
         <header className="mb-8 space-y-6">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-200 leading-tight">
+          <h1 className="text-4xl font-display md:text-5xl font-bold text-gray-200 leading-tight">
             {post.title}
           </h1>
           

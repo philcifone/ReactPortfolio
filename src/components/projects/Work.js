@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import libaraxiaAlpha from '../images/libaraxiaAlpha.png';
-import backblaze from '../images/BLZE.png';
+import libaraxiaAlpha from '../../images/libaraxiaAlpha.png';
+import backblaze from '../../images/BLZE.png';
 import { ProjectCard } from './InteractiveProjectCard';
 import RockPaperScissors from './RockPaperScissors';
 import WordGame from './WordGame';
@@ -111,7 +111,7 @@ const Work = () => {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Projects Section */}
         <div className="mb-24">
-          <h2 className="text-4xl font-bold text-center mb-16 text-gray-200">
+          <h2 className="text-4xl font-display font-bold text-center mb-16 text-gray-200">
             Featured Projects
           </h2>
           <div className="grid md:grid-cols-2 gap-8">
@@ -134,7 +134,7 @@ const Work = () => {
 
         {/* Interactive Tools Section */}
         <div>
-          <h2 className="text-4xl font-bold text-center mb-4 text-gray-200">
+          <h2 className="text-4xl font-display text-center mb-4 text-gray-200">
             Interactive Zone
           </h2>
           <p className="text-xl text-center mb-12 text-gray-400">
