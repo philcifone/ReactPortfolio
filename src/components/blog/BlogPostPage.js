@@ -55,7 +55,7 @@ const BlogPostPage = () => {
         <div className="max-w-md p-8 bg-neutral-800 rounded-lg shadow-lg text-center">
           <p className="text-red-400 mb-4 text-lg">{error}</p>
           <Link 
-            to="/" 
+            to="/#blog" 
             className="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 transition-colors"
           >
             <ArrowLeft size={20} />
@@ -72,8 +72,8 @@ const BlogPostPage = () => {
       <nav className="sticky top-0 bg-neutral-900/80 backdrop-blur-md border-b border-neutral-800 z-10">
         <div className="max-w-4xl mx-auto px-4 py-4">
           <Link 
-            to="/" 
-            className="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 transition-colors"
+            to="/#blog" 
+            className="inline-flex items-center gap-2 text-kelly-green hover:text-light-olive transition-colors"
           >
             <ArrowLeft size={20} />
             Back to Home
@@ -85,7 +85,7 @@ const BlogPostPage = () => {
       <article className="w-full max-w-4xl mx-auto px-4 py-8">
         {/* Header Section */}
         <header className="mb-8 space-y-6">
-          <h1 className="text-4xl font-display md:text-5xl font-bold text-gray-200 leading-tight">
+          <h1 className="text-4xl font-display text-center md:text-5xl text-gray-200 leading-tight">
             {post.title}
           </h1>
           
@@ -134,7 +134,70 @@ const BlogPostPage = () => {
             className="text-gray-300 leading-relaxed"
             remarkPlugins={[remarkGfm]}
             components={{
-              code({node, inline, className, children, ...props}) {
+              // Headings
+              h1: (props) => (
+                <h1 className="text-3xl font-bold mt-8 mb-4 text-gray-200">
+                  {props.children}
+                </h1>
+              ),
+              
+              h2: (props) => (
+                <h2 className="text-2xl font-bold mt-6 mb-4 text-gray-200">
+                  {props.children}
+                </h2>
+              ),
+              
+              h3: (props) => (
+                <h3 className="text-xl font-bold mt-4 mb-3 text-gray-200">
+                  {props.children}
+                </h3>
+              ),
+              
+              // Block elements
+              p: (props) => (
+                <p className="mb-4 text-gray-300">
+                  {props.children}
+                </p>
+              ),
+              
+              ul: (props) => (
+                <ul className="list-disc pl-6 mb-4 text-gray-300">
+                  {props.children}
+                </ul>
+              ),
+              
+              ol: (props) => (
+                <ol className="list-decimal pl-6 mb-4 text-gray-300">
+                  {props.children}
+                </ol>
+              ),
+              
+              li: (props) => (
+                <li className="mb-2">
+                  {props.children}
+                </li>
+              ),
+              
+              blockquote: (props) => (
+                <blockquote className="border-l-4 border-gray-600 pl-4 italic my-4 text-gray-400">
+                  {props.children}
+                </blockquote>
+              ),
+              
+              // Inline elements
+              a: (props) => (
+                <a 
+                  href={props.href}
+                  className="text-blue-400 hover:text-blue-300 transition-colors"
+                  target={props.href?.startsWith('http') ? '_blank' : undefined}
+                  rel={props.href?.startsWith('http') ? 'noopener noreferrer' : undefined}
+                >
+                  {props.children}
+                </a>
+              ),
+              
+              // Code blocks (from earlier)
+              code: ({inline, className, children}) => {
                 const match = /language-(\w+)/.exec(className || '');
                 return !inline && match ? (
                   <SyntaxHighlighter
@@ -142,30 +205,15 @@ const BlogPostPage = () => {
                     language={match[1]}
                     PreTag="div"
                     className="rounded-lg"
-                    {...props}
                   >
                     {String(children).replace(/\n$/, '')}
                   </SyntaxHighlighter>
                 ) : (
-                  <code className={className} {...props}>
+                  <code className={className}>
                     {children}
                   </code>
                 )
-              },
-              // Custom styling for other markdown elements
-              h1: ({node, ...props}) => <h1 className="text-3xl font-bold mt-8 mb-4 text-gray-200" {...props} />,
-              h2: ({node, ...props}) => <h2 className="text-2xl font-bold mt-6 mb-4 text-gray-200" {...props} />,
-              h3: ({node, ...props}) => <h3 className="text-xl font-bold mt-4 mb-3 text-gray-200" {...props} />,
-              p: ({node, ...props}) => <p className="mb-4 text-gray-300" {...props} />,
-              ul: ({node, ...props}) => <ul className="list-disc pl-6 mb-4 text-gray-300" {...props} />,
-              ol: ({node, ...props}) => <ol className="list-decimal pl-6 mb-4 text-gray-300" {...props} />,
-              li: ({node, ...props}) => <li className="mb-2" {...props} />,
-              blockquote: ({node, ...props}) => (
-                <blockquote className="border-l-4 border-gray-600 pl-4 italic my-4 text-gray-400" {...props} />
-              ),
-              a: ({node, ...props}) => (
-                <a className="text-blue-400 hover:text-blue-300 transition-colors" {...props} />
-              ),
+              }
             }}
           >
             {post.content}

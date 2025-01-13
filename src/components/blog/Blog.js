@@ -18,10 +18,24 @@ const Blog = () => {
                 }
                 
                 const data = await response.json();
-                console.log('Received posts from API:', data);
+                console.log('Post data before processing:', data); // New log
                 
                 if (Array.isArray(data)) {
-                    setPosts(data);
+                    // New: Debug logging for tags
+                    data.forEach(post => {
+                        console.log('Post tags:', post.tags);
+                        console.log('Post tags type:', typeof post.tags);
+                    });
+                    
+                    // New: Process the data before setting state
+                    const processedData = data.map(post => ({
+                        ...post,
+                        tags: (post.tags || []).map(tag => 
+                            typeof tag === 'object' ? JSON.stringify(tag) : String(tag)
+                        )
+                    }));
+                    
+                    setPosts(processedData); // Changed from setPosts(data)
                 } else {
                     console.error('API returned non-array data:', data);
                     setError('Received invalid data format from server');
@@ -33,7 +47,7 @@ const Blog = () => {
                 setLoading(false);
             }
         };
-
+    
         fetchPosts();
     }, []);
 
@@ -53,7 +67,7 @@ const Blog = () => {
     return (
         <section id="blog" className="py-20 bg-neutral-700">
             <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-                <h2 className="text-4xl font-display font-bold text-center mb-16 text-gray-200">
+                <h2 className="text-4xl font-display text-center mb-16 text-gray-200">
                     Latest Writings
                 </h2>
                 {error ? (
@@ -64,6 +78,9 @@ const Blog = () => {
                     <div className="grid md:grid-cols-2 gap-8">
                         {posts.map((post) => {
                             console.log('Rendering post:', post); // Debug log
+                            const processedTags = (post.tags || []).map(tag => 
+                                typeof tag === 'object' ? JSON.stringify(tag) : String(tag)
+                            );
                             return (
                                 <BlogPost
                                     key={post.id}
@@ -71,7 +88,7 @@ const Blog = () => {
                                     title={post.title}
                                     excerpt={post.excerpt}
                                     date={post.date || post.created_at}
-                                    tags={post.tags || []}
+                                    tags={processedTags}
                                     image_path={post.image_path}
                                 />
                             );
