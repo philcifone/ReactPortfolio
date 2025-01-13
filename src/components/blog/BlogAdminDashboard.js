@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Pencil, Trash2, Plus } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -10,42 +10,53 @@ const BlogAdminDashboard = () => {
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
 
-  // Authentication error handler
-  const handleAuthError = () => {
-    localStorage.removeItem('authToken');
-    navigate('/admin/login');
-  };
+ // Authentication error handler - keep this at the top, unchanged
+const handleAuthError = useCallback(() => {
+  localStorage.removeItem('authToken');
+  navigate('/admin/login');
+}, [navigate]);
 
-  // Fetch all posts on component mount
-  useEffect(() => {
-    fetchPosts();
-  }, []);
-
-  const fetchPosts = async () => {
-    try {
+// Memoize fetchPosts with useCallback
+const fetchPosts = useCallback(async () => {
+  try {
       const token = localStorage.getItem('authToken');
       if (!token) {
-        handleAuthError();
-        return;
+          handleAuthError();
+          return;
       }
 
       const response = await fetch('/api/posts', {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
+          headers: {
+              'Authorization': `Bearer ${token}`
+          }
       });
 
       if (response.status === 401) {
-        handleAuthError();
-        return;
+          handleAuthError();
+          return;
       }
 
       const data = await response.json();
-      setPosts(data);
-    } catch (error) {
+      console.log('Raw posts data:', data); // Debug log
+
+      // Process the data to ensure tags are properly formatted
+      const processedData = data.map(post => ({
+          ...post,
+          tags: Array.isArray(post.tags) 
+              ? post.tags.map(tag => typeof tag === 'object' ? JSON.stringify(tag) : String(tag))
+              : []
+      }));
+
+      setPosts(processedData);
+  } catch (error) {
       setMessage('Error fetching posts: ' + error.message);
-    }
-  };
+  }
+}, [handleAuthError]); // Add handleAuthError as dependency
+
+// Keep the useEffect in the same place
+useEffect(() => {
+  fetchPosts();
+}, [fetchPosts]);
 
   const handleDelete = async (postId) => {
     if (window.confirm('Are you sure you want to delete this post?')) {
@@ -131,7 +142,7 @@ const BlogAdminDashboard = () => {
   return (
     <div className="max-w-6xl mx-auto p-6 bg-neutral-800 min-h-screen">
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold text-gray-200">Blog Admin Dashboard</h1>
+        <h1 className="text-3xl font-display text-gray-200">Blog Admin Dashboard</h1>
         <button
           onClick={() => setShowCreateForm(true)}
           className="flex items-center gap-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
