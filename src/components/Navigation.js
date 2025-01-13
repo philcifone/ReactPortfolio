@@ -30,7 +30,7 @@ export const Navigation = ({ isDark, setIsDark }) => {
             <span className="text-2xl font-display text-light-olive">Phil Cifone</span>
             
             {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-8 font-semibold">
+            <div className="hidden md:flex text-xl items-center space-x-8 font-semibold">
               <a href="#about" className="text-gray-300 hover:text-blue-400 transition-colors">About</a>
               <a href="#work" className="text-gray-300 hover:text-blue-400 transition-colors">Work</a>
               <a href="#gallery" className="text-gray-300 hover:text-blue-400 transition-colors">Gallery</a>

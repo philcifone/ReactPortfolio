@@ -41,8 +41,8 @@ const SkillCard = ({ Icon, title, description }) => {
       </div>
 
       {/* Content */}
-      <h3 className="relative z-10 text-xl font-display text-neutral-100">{title}</h3>
-      <p className="relative z-10 font-sans font-medium text-gray-300">{description}</p>
+      <h3 className="relative z-10 text-xl font-display text-center text-neutral-100">{title}</h3>
+      <p className="relative z-10 font-sans text-base text-center font-medium text-gray-300">{description}</p>
     </div>
   );
 };

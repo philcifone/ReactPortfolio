@@ -20,7 +20,7 @@ const Hero = () => (
         <br />
         Creating Today
       </h1>
-      <p className="font-sans font-medium text-xl text-gray-200 max-w-2xl mx-auto">
+      <p className="font-sans font-medium text-2xl text-gray-200 max-w-2xl mx-auto">
         Digital Preservation Reimagined: Crafting Open Solutions for Tomorrow's Archives
       </p>
       <a href="#about" className="inline-block animate-bounce mt-8">

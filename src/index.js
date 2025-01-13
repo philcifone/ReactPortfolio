@@ -4,6 +4,7 @@ import './styles.css';
 import App from './App';
 import '@fontsource/young-serif';
 import '@fontsource-variable/raleway';
+import '@fontsource/courier-prime';
 
 const container = document.getElementById('root');
 const root = createRoot(container);
