@@ -1,21 +1,21 @@
 import React, { useState } from 'react';
 import libaraxiaAlpha from '../../images/libaraxiaAlpha.png';
 import backblaze from '../../images/BLZE.png';
-import { ProjectCard } from './InteractiveProjectCard';
+import ProjectCard from './ProjectCard';
 import RockPaperScissors from './RockPaperScissors';
 import WordGame from './WordGame';
 import DicewareGenerator from './DicewareGenerator';
 import StorageCalculator from './StorageCalculator';
 import HangmanGame from './Hangman';
 import CocktailFinder from './CocktailFinder';
-import { ColorPaletteDemo } from './InteractiveProjectCard';
+import ColorPaletteDemo from './ColorPalette';
 
 const TabButton = ({ isActive, onClick, children }) => (
   <button
     onClick={onClick}
     className={`px-4 py-2 rounded-lg transition-colors ${
       isActive
-        ? 'bg-blue-600 text-white'
+        ? 'bg-baby-blue text-white'
         : 'bg-neutral-700 text-gray-300 hover:bg-neutral-600'
     }`}
   >
@@ -28,7 +28,7 @@ const SubTabButton = ({ isActive, onClick, children }) => (
     onClick={onClick}
     className={`px-3 py-1 text-sm rounded-md transition-colors ${
       isActive
-        ? 'bg-green-600 text-white'
+        ? 'bg-kelly-green hover:bg-light-olive text-white'
         : 'bg-neutral-600 text-gray-300 hover:bg-neutral-500'
     }`}
   >

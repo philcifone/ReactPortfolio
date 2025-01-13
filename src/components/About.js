@@ -23,9 +23,9 @@ const SkillCard = ({ Icon, title, description }) => {
         className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-all duration-300"
         style={{
           background: `radial-gradient(circle at ${mousePosition.x}% ${mousePosition.y}%, 
-            rgba(124, 58, 237, 0.12),
-            rgba(6, 182, 212, 0.12),
-            rgba(52, 211, 153, 0.12)
+            rgba(179, 113, 223, 0.33),
+            rgba(43, 184, 209, 0.34),
+            rgba(133, 231, 21, 0.4)
           )`,
           filter: 'blur(8px)',
           transform: `translate(${(mousePosition.x - 50) * 0.05}px, ${(mousePosition.y - 50) * 0.05}px)`,
@@ -36,21 +36,13 @@ const SkillCard = ({ Icon, title, description }) => {
       <div className="relative z-10">
         <Icon 
           size={40} 
-          className="mx-auto group-hover:text-transparent transition-all duration-300"
-          style={{
-            color: '#4ade80',
-            backgroundImage: 'linear-gradient(135deg, #4ade80, #06b6d4, #818cf8)',
-            backgroundSize: '200% 200%',
-            backgroundClip: 'text',
-            WebkitBackgroundClip: 'text',
-            animation: 'gradient 3s ease infinite',
-          }}
+          className="mx-auto text-light-olive transition-all duration-300"
         />
       </div>
 
       {/* Content */}
-      <h3 className="relative z-10 text-xl font-display font-semibold text-gray-200">{title}</h3>
-      <p className="relative z-10 font-sans font-medium text-gray-400">{description}</p>
+      <h3 className="relative z-10 text-xl font-display text-neutral-100">{title}</h3>
+      <p className="relative z-10 font-sans font-medium text-gray-300">{description}</p>
     </div>
   );
 };
@@ -66,7 +58,8 @@ const About = () => (
 
     {/* Content */}
     <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h2 className="text-4xl font-display font-bold text-center mb-16 text-gray-200">whoami?</h2>
+      <h2 className="text-4xl font-display text-center mb-4 text-gray-200">who is phil?</h2>
+      <h3 className="text-2xl font-display text-center mb-16 text-gray-200">good question...</h3>
       <div className="grid md:grid-cols-3 gap-8">
         <SkillCard
           Icon={Archive}

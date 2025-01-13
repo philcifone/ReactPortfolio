@@ -33,3 +33,4 @@ src/images/**/*.jpg
 src/images/**/*.jpeg
 src/images/**/*.webp
 src/images/**/*.png
+src/server/uploads/*

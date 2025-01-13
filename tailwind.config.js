@@ -7,13 +7,15 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        'med-orange': '#D27354',
-        'light-olive': '#8ebf5b',
+        'med-orange': '#db701b',
+        'light-olive': '#6a9839',
         'kelly-green': '#4f7d19',
+        'baby-blue': '#10a89a',
+        'burnt-red': '#81301e'
       },
       fontFamily: {
         display: ['Young Serif', 'serif'],
-        sans: ['Raleway Variable', 'sans-serif'],
+        sans: ['Courier Prime', 'monospace'],
       },
     },
   },

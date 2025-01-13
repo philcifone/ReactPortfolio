@@ -1,6 +1,6 @@
 import React from 'react';
 import { ChevronDown } from 'lucide-react';
-import mc102121 from '../images/MC1021-2-1.jpg'
+//import mc102121 from '../images/MC1021-2-1.jpg'
 import vb10282 from '../images/vb10282.webp'
 
 const Hero = () => (
@@ -11,11 +11,11 @@ const Hero = () => (
       }}
   >
     {/* Overlay */}
-    <div className="absolute inset-0 bg-black/75" />
+    <div className="absolute inset-0 bg-black/70" />
     
     {/* Content */}
     <div className="text-center space-y-6 p-4 relative z-10">
-      <h1 className="font-display text-5xl md:text-7xl bg-clip-text text-transparent p-8 bg-light-olive font-black">
+      <h1 className="font-display text-5xl md:text-7xl bg-clip-text text-transparent p-8 bg-light-olive">
         Preserving Tomorrow,
         <br />
         Creating Today

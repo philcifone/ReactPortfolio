@@ -148,7 +148,7 @@ const ContactForm = () => {
                 className={`w-full px-6 py-3 rounded-lg flex items-center justify-center gap-2 text-white font-medium transition-colors ${
                   status === 'submitting'
                     ? 'bg-blue-400 cursor-not-allowed'
-                    : 'bg-blue-500 hover:bg-blue-600'
+                    : 'bg-baby-blue hover:bg-kelly-green'
                 }`}
               >
                 <Send size={20} />
@@ -176,19 +176,19 @@ const ContactForm = () => {
             <div className="flex justify-center md:justify-start space-x-6">
               <a 
                 href="mailto:phil@philcifone.com" 
-                className="p-4 rounded-full bg-neutral-600 hover:bg-neutral-500 transition-colors"
+                className="p-4 rounded-full bg-kelly-green hover:bg-baby-blue transition-colors"
               >
                 <Mail size={24} className="text-gray-200" />
               </a>
               <a 
                 href="https://github.com/philcifone" 
-                className="p-4 rounded-full bg-neutral-600 hover:bg-neutral-500 transition-colors"
+                className="p-4 rounded-full bg-kelly-green hover:bg-baby-blue transition-colors"
               >
                 <Github size={24} className="text-gray-200" />
               </a>
               <a 
                 href="https://linkedin.com/in/phillip-cifone" 
-                className="p-4 rounded-full bg-neutral-600 hover:bg-neutral-500 transition-colors"
+                className="p-4 rounded-full bg-kelly-green hover:bg-baby-blue transition-colors"
               >
                 <Linkedin size={24} className="text-gray-200" />
               </a>
@@ -202,7 +202,7 @@ const ContactForm = () => {
 
 const Footer = () => (
   <footer className="py-8 bg-neutral-800 border-t border-neutral-700">
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-400">
+    <div className="max-w-6xl font-display mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-400">
       <p>&copy; {new Date().getFullYear()} Phil Cifone. All rights reserved.</p>
     </div>
   </footer>

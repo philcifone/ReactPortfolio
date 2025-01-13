@@ -71,7 +71,7 @@ const CategoryTab = ({ category, isActive, onClick }) => (
     `}
   >
     {/* Tab text */}
-    <span className="relative z-20 text-xs md:text-base font-medium whitespace-nowrap">
+    <span className="relative z-20 font-display text-xs md:text-base font-medium whitespace-nowrap">
       {category.label}
     </span>
 

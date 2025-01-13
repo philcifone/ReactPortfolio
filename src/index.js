@@ -1,21 +1,17 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
+import { createRoot } from 'react-dom/client';
 import './styles.css';
 import App from './App';
-//import '@fontsource/merriweather/300.css';
-//import '@fontsource/merriweather/400.css';
-//import '@fontsource/merriweather/700.css';
-//import '@fontsource/merriweather/900.css';
-//import '@fontsource/montserrat/400.css';
-//import '@fontsource/montserrat/500.css';
-//import '@fontsource/montserrat/600.css';
-//import '@fontsource/montserrat/700.css';
-//import '@fontsource/dm-serif-text.css';
 import '@fontsource/young-serif';
 import '@fontsource-variable/raleway';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(<App />);
+const container = document.getElementById('root');
+const root = createRoot(container);
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
