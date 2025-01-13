@@ -74,7 +74,7 @@ const StorageCalculator = () => {
   return (
     <div className="bg-neutral-800 rounded-lg p-6 max-w-2xl mx-auto">
       <div className="text-center mb-6">
-        <h3 className="text-2xl font-bold text-gray-200 mb-2">Storage Configuration Calculator</h3>
+        <h3 className="text-2xl font-display text-gray-200 mb-2">Storage Configuration Calculator</h3>
         <p className="text-gray-400">Calculate usable space and redundancy for ZFS and RAID configurations</p>
       </div>
 

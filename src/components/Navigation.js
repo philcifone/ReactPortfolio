@@ -27,7 +27,7 @@ export const Navigation = ({ isDark, setIsDark }) => {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             {/* Logo/Name */}
-            <span className="text-xl font-display text-light-olive font-black">Phil Cifone</span>
+            <span className="text-2xl font-display text-light-olive">Phil Cifone</span>
             
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-8 font-semibold">

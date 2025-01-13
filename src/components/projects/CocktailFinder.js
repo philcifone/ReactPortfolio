@@ -83,14 +83,14 @@ const CocktailFinder = () => {
   return (
     <div className="bg-neutral-800 rounded-lg p-6">
       <div className="text-center mb-6">
-        <h3 className="text-2xl font-bold text-gray-200 mb-2">
+        <h3 className="text-2xl font-display text-gray-200 mb-2">
           Cocktail Recipe Finder
         </h3>
         <p className="text-gray-400">Find recipes by selecting your preferred spirit</p>
       </div>
 
       {/* Spirit Selection Tabs */}
-      <div className="flex flex-wrap gap-2 mb-6 max-h-48 overflow-y-auto p-2 bg-neutral-700 rounded-lg">
+      <div className="flex font-display flex-wrap gap-2 mb-6 max-h-48 overflow-y-auto p-2 bg-neutral-700 rounded-lg">
         {spirits.map((spirit) => (
           <button
             key={spirit}
@@ -100,7 +100,7 @@ const CocktailFinder = () => {
             }}
             className={`px-4 py-2 rounded-full transition-colors flex items-center gap-2
               ${selectedSpirit === spirit 
-                ? 'bg-blue-600 text-white' 
+                ? 'bg-baby-blue text-white' 
                 : 'bg-neutral-600 text-gray-300 hover:bg-neutral-500'}`}
           >
             <Wine size={16} />
@@ -118,7 +118,7 @@ const CocktailFinder = () => {
       <div className="grid md:grid-cols-2 gap-6">
         {/* Cocktail List */}
         <div className="bg-neutral-700 rounded-lg p-4 h-[600px] overflow-y-auto">
-          <h4 className="text-lg font-semibold text-gray-200 mb-4">
+          <h4 className="text-lg font-display text-gray-200 mb-4">
             {loading ? 'Loading...' : `${selectedSpirit} Cocktails`}
           </h4>
           {loading ? (
@@ -147,7 +147,7 @@ const CocktailFinder = () => {
         <div className="bg-neutral-700 rounded-lg p-4 h-[600px] overflow-y-auto">
           {selectedCocktail ? (
             <div className="space-y-4">
-              <h4 className="text-xl font-semibold text-gray-200">
+              <h4 className="text-xl font-display text-gray-200">
                 {selectedCocktail.strDrink}
               </h4>
               

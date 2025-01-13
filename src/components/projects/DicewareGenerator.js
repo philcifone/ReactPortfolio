@@ -99,7 +99,7 @@ const DicewareGenerator = () => {
   return (
     <div className="bg-neutral-800 rounded-lg p-6">
       <div className="text-center mb-6">
-        <h3 className="text-2xl font-bold text-gray-200 mb-2">Diceware Password Generator</h3>
+        <h3 className="text-2xl font-display text-gray-200 mb-2">Diceware Password Generator</h3>
         <p className="text-gray-400">Generate secure, memorable passwords using the Diceware method</p>
       </div>
 
@@ -151,7 +151,7 @@ const DicewareGenerator = () => {
                   }}
                   className={`flex-1 py-2 rounded-lg transition-colors ${
                     numWords === num
-                      ? 'bg-blue-600 text-white'
+                      ? 'bg-kelly-green text-white'
                       : 'bg-neutral-700 text-gray-300 hover:bg-neutral-600'
                   }`}
                 >
