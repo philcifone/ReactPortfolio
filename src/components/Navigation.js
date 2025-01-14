@@ -31,11 +31,11 @@ export const Navigation = ({ isDark, setIsDark }) => {
             
             {/* Desktop Navigation */}
             <div className="hidden md:flex text-xl items-center space-x-8 font-semibold">
-              <a href="#about" className="text-gray-300 hover:text-blue-400 transition-colors">About</a>
-              <a href="#work" className="text-gray-300 hover:text-blue-400 transition-colors">Work</a>
-              <a href="#gallery" className="text-gray-300 hover:text-blue-400 transition-colors">Gallery</a>
-              <a href="#blog" className="text-gray-300 hover:text-blue-400 transition-colors">Blog</a>
-              <a href="#contact" className="text-gray-300 hover:text-blue-400 transition-colors">Contact</a>
+              <a href="#about" className="text-gray-300 hover:text-blue-400 transition-colors">whoami</a>
+              <a href="#work" className="text-gray-300 hover:text-blue-400 transition-colors">projects</a>
+              <a href="#gallery" className="text-gray-300 hover:text-blue-400 transition-colors">photos</a>
+              <a href="#blog" className="text-gray-300 hover:text-blue-400 transition-colors">blog</a>
+              <a href="#contact" className="text-gray-300 hover:text-blue-400 transition-colors">contact</a>
             </div>
 
             {/* Mobile Menu Button */}
@@ -58,11 +58,11 @@ export const Navigation = ({ isDark, setIsDark }) => {
           }`}
         >
           <div className="px-4 py-2 border-t border-neutral-800">
-            <a href="#about" className="block py-3 text-gray-300 hover:text-blue-400 transition-colors text-right" onClick={handleMenuItemClick}>About</a>
-            <a href="#work" className="block py-3 text-gray-300 hover:text-blue-400 transition-colors text-right" onClick={handleMenuItemClick}>Work</a>
-            <a href="#gallery" className="block py-3 text-gray-300 hover:text-blue-400 transition-colors text-right" onClick={handleMenuItemClick}>Gallery</a>
-            <a href="#blog" className="block py-3 text-gray-300 hover:text-blue-400 transition-colors text-right" onClick={handleMenuItemClick}>Blog</a>
-            <a href="#contact" className="block py-3 text-gray-300 hover:text-blue-400 transition-colors text-right" onClick={handleMenuItemClick}>Contact</a>
+            <a href="#about" className="block py-3 text-gray-300 hover:text-blue-400 transition-colors text-right" onClick={handleMenuItemClick}>whoami</a>
+            <a href="#work" className="block py-3 text-gray-300 hover:text-blue-400 transition-colors text-right" onClick={handleMenuItemClick}>projects</a>
+            <a href="#gallery" className="block py-3 text-gray-300 hover:text-blue-400 transition-colors text-right" onClick={handleMenuItemClick}>photos</a>
+            <a href="#blog" className="block py-3 text-gray-300 hover:text-blue-400 transition-colors text-right" onClick={handleMenuItemClick}>blog</a>
+            <a href="#contact" className="block py-3 text-gray-300 hover:text-blue-400 transition-colors text-right" onClick={handleMenuItemClick}>contact</a>
           </div>
         </div>
       </nav>
