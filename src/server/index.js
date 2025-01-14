@@ -1,10 +1,19 @@
-require('dotenv').config();  // This lets you use the .env file
+const path = require('path');
+require('dotenv').config({ path: path.resolve(__dirname, '../../.env') });
+
+// Add this right after to debug
+console.log('Current directory:', __dirname);
+console.log('Looking for .env in:', path.resolve(__dirname, '../../.env'));
+console.log('Environment variables:', {
+  JWT_SECRET: process.env.JWT_SECRET ? 'Set' : 'Not set',
+  NODE_ENV: process.env.NODE_ENV,
+});
+
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');   
 const authenticateToken = require('./middleware/auth');
 const multer = require('multer');
-const path = require('path');
 const db = require('./database');
 const cors = require('cors');
 
@@ -14,6 +23,8 @@ const app = express();
 app.use(cors()); // Enable CORS for all routes
 app.use(express.json());
 app.use('/uploads', express.static('uploads'));
+
+app.set('trust proxy', 1);
 
 // Ensure uploads directory exists
 const fs = require('fs');
