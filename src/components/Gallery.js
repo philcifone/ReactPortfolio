@@ -40,10 +40,10 @@ const ImageModal = ({ image, onClose, onNext, onPrev, hasNext, hasPrev }) => (
           alt={image.alt}
           className="max-w-full max-h-[80vh] object-contain"
         />
-        {/* Caption with fade-in animation */}
+        {/* Caption with fade-in animation -- DISABLED FOR NOW
         <div className="mt-4 text-white text-center max-w-2xl animate-fadeIn">
           <p className="text-lg">{image.caption}</p>
-        </div>
+        </div>*/}
       </div>
 
       {hasNext && (
@@ -52,7 +52,7 @@ const ImageModal = ({ image, onClose, onNext, onPrev, hasNext, hasPrev }) => (
             e.stopPropagation();
             onNext();
           }}
-          className="fixed right-2 md:right-8 top-1/2 -translate-y-1/2 text-white hover:text-gray-300 transition-colors bg-black bg-opacity-75 hover:bg-opacity-90 p-3 md:p-4 rounded-full shadow-lg z-50"
+          className="fixed right-2 md:right-8 top-1/2 -translate-y-1/2 text-white hover:text-gray-300 transition-colors bg-opacity-75 hover:bg-opacity-90 p-3 md:p-4 rounded-full shadow-lg z-50"
         >
           <ChevronRight size={32} />
         </button>
