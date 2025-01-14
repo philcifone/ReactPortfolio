@@ -224,14 +224,11 @@ const ColorPaletteDemo = () => {
                   key={num}
                   onClick={() => {
                     setNumColors(num);
-                    // Maintain existing colors and add new ones if needed
                     setColors(prev => {
                       const newColors = [...prev];
-                      // If we need more colors, generate them
                       while (newColors.length < num) {
                         newColors.push(generateRandomColor());
                       }
-                      // Slice to the desired length
                       return newColors.slice(0, num);
                     });
                     setLockedColors(prev => {
@@ -333,14 +330,45 @@ const ColorPaletteDemo = () => {
         ))}
       </div>
 
-      {/* Generate Button */}
-      <button
-        onClick={generateNewColors}
-        className="w-full py-2 bg-kelly-green hover:bg-light-olive text-white rounded-lg transition-colors flex items-center justify-center gap-2"
-      >
-        {harmonyMode === 'random' ? <Palette size={20} /> : <Palette size={20} />}
-        Generate {harmonyMode !== 'random' ? harmonyMode : ''} Colors
-      </button>
+      {/* Action Buttons */}
+      <div className="flex gap-4">
+        {/* Generate Button */}
+        <button
+          onClick={generateNewColors}
+          className="flex-1 py-2 bg-kelly-green hover:bg-light-olive text-white rounded-lg transition-colors flex items-center justify-center gap-2"
+        >
+          <Palette size={20} />
+          Generate {harmonyMode !== 'random' ? harmonyMode : ''} Colors
+        </button>
+
+        {/* Copy Full Palette Button */}
+        <button
+          onClick={() => {
+            const paletteData = colors
+              .slice(0, numColors)
+              .map((color, index) => {
+                const formattedColor =
+                  format === 'hex'
+                    ? (color.startsWith('rgb') ? rgbToHex(color) : color)
+                    : (color.startsWith('#') ? hexToRgb(color) : color);
+                return `${index + 1}: ${formattedColor}`;
+              })
+              .join('\n');
+            navigator.clipboard.writeText(paletteData)
+              .then(() => {
+                setShowAlert(true);
+                setTimeout(() => setShowAlert(false), 2000);
+              })
+              .catch(err => {
+                console.error('Failed to copy palette:', err);
+              });
+          }}
+          className="flex-1 py-2 bg-baby-blue hover:bg-blue-600 text-white rounded-lg transition-colors flex items-center justify-center gap-2"
+        >
+          <Copy size={20} />
+          Copy Full Palette
+        </button>
+      </div>
 
       {/* Copy Alert */}
       {showAlert && (
@@ -352,52 +380,6 @@ const ColorPaletteDemo = () => {
       )}
     </div>
   );
-  const copyFullPalette = () => {
-    // Format the palette as a string
-    const paletteData = colors
-      .slice(0, numColors)
-      .map((color, index) => {
-        const formattedColor =
-          format === 'hex'
-            ? (color.startsWith('rgb') ? rgbToHex(color) : color)
-            : (color.startsWith('#') ? hexToRgb(color) : color);
-        return `${index + 1}: ${formattedColor}`;
-      })
-      .join('\n');
-
-    // Copy to clipboard
-    navigator.clipboard.writeText(paletteData)
-      .then(() => {
-        setShowAlert(true);
-        setTimeout(() => setShowAlert(false), 2000);
-      })
-      .catch(err => {
-        console.error('Failed to copy palette:', err);
-      });
-  };
-
-  return (
-    <div className="p-6 bg-neutral-800 rounded-lg">
-      {/* ... existing components ... */}
-      
-      {/* Copy Full Palette */}
-      <div className="text-center mt-6">
-        <button
-          onClick={copyFullPalette}
-          className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded"
-        >
-          Copy Full Palette
-        </button>
-        {showAlert && (
-          <div className="mt-2 text-sm text-green-500">
-            Palette copied to clipboard!
-          </div>
-        )}
-      </div>
-
-      {/* ... existing components ... */}
-    </div>
-  );
 };
 
-export default ColorPaletteDemo
+export default ColorPaletteDemo;

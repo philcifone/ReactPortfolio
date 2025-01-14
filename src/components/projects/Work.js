@@ -56,7 +56,7 @@ const Work = () => {
   const games = [
     { id: 'wordGame', label: 'Word Game', component: WordGame },
     { id: 'rps', label: 'Rock Paper Scissors', component: RockPaperScissors },
-    { id: 'hangman', label: 'Hangman', component: HangmanGame }
+    { id: 'hangman', label: 'Hangman', component: HangmanGame },
   ];
 
   const renderInteractiveContent = () => {
