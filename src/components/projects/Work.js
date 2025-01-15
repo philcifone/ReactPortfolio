@@ -9,6 +9,7 @@ import StorageCalculator from './StorageCalculator';
 import HangmanGame from './Hangman';
 import CocktailFinder from './CocktailFinder';
 import ColorPaletteDemo from './ColorPalette';
+import ArtGenerator from './ArtGenerator';
 
 const TabButton = ({ isActive, onClick, children }) => (
   <button
@@ -39,7 +40,7 @@ const SubTabButton = ({ isActive, onClick, children }) => (
 const Work = () => {
   const [activeToolType, setActiveToolType] = useState('utilities');
   const [activeUtility, setActiveUtility] = useState('colorPalette');
-  const [activeGame, setActiveGame] = useState('wordGame');
+  const [activeGame, setActiveGame] = useState('artGenerator');
 
   const toolTypes = [
     { id: 'utilities', label: 'Utilities' },
@@ -54,6 +55,7 @@ const Work = () => {
   ];
 
   const games = [
+    { id: 'artGenerator', label: 'Art Generator', component: ArtGenerator },
     { id: 'wordGame', label: 'Word Game', component: WordGame },
     { id: 'rps', label: 'Rock Paper Scissors', component: RockPaperScissors },
     { id: 'hangman', label: 'Hangman', component: HangmanGame },
@@ -135,10 +137,9 @@ const Work = () => {
         {/* Interactive Tools Section */}
         <div>
           <h2 className="text-4xl font-display text-center mb-4 text-gray-200">
-            Interactive Zone
+            ~ Activity Zone ~
           </h2>
           <p className="text-xl text-center mb-12 text-gray-400">
-            Explore these utilities and games - take a break, have some fun!
           </p>
 
           {renderInteractiveContent()}

@@ -294,11 +294,9 @@ const ColorPaletteDemo = () => {
       </div>
 
       {/* Color Palette */}
-      <div className="grid gap-4 mb-6" style={{ 
-        gridTemplateColumns: `repeat(${numColors}, 1fr)` 
-      }}>
+      <div className="grid grid-cols-5 gap-2 mb-6">
         {colors.slice(0, numColors).map((color, index) => (
-          <div key={index} className="flex-1">
+          <div key={index} className="w-full">
             <div 
               className="relative h-32 rounded-lg cursor-pointer transition-all hover:scale-105 group"
               style={{ backgroundColor: color }}
@@ -309,7 +307,7 @@ const ColorPaletteDemo = () => {
                   e.stopPropagation();
                   toggleLock(index);
                 }}
-                className="absolute z-10 top-2 right-2 p-1 rounded-full bg-black/20 hover:bg-black/40"
+                className="absolute z-10 top-2 right-2 p-2 rounded-full bg-black/20 hover:bg-black/40"
               >
                 {lockedColors[index] ? 
                   <Lock className="w-4 h-4 text-white" /> : 
@@ -323,7 +321,7 @@ const ColorPaletteDemo = () => {
                 {copiedIndex === index ? <Check size={24} /> : <Copy size={24} />}
               </div>
             </div>
-            <p className="mt-2 text-center text-sm text-gray-300 font-mono select-all">
+            <p className="mt-2 text-center text-xs text-gray-300 font-mono select-all break-all">
               {color}
             </p>
           </div>
@@ -331,17 +329,19 @@ const ColorPaletteDemo = () => {
       </div>
 
       {/* Action Buttons */}
-      <div className="flex gap-4">
+      <div className="flex items-center gap-3">
         {/* Generate Button */}
         <button
           onClick={generateNewColors}
-          className="flex-1 py-2 bg-kelly-green hover:bg-light-olive text-white rounded-lg transition-colors flex items-center justify-center gap-2"
+          className="flex-1 px-4 py-3 bg-kelly-green hover:bg-light-olive text-white rounded-lg transition-colors flex items-center justify-center gap-2"
         >
-          <Palette size={20} />
-          Generate {harmonyMode !== 'random' ? harmonyMode : ''} Colors
+          <Palette size={18} className="flex-shrink-0" />
+          <span className="truncate">
+            Generate {harmonyMode !== 'random' ? harmonyMode : ''} Colors
+          </span>
         </button>
-
-        {/* Copy Full Palette Button */}
+        
+        {/* Copy Full Palette Button - Icon Only */}
         <button
           onClick={() => {
             const paletteData = colors
@@ -363,10 +363,10 @@ const ColorPaletteDemo = () => {
                 console.error('Failed to copy palette:', err);
               });
           }}
-          className="flex-1 py-2 bg-baby-blue hover:bg-blue-600 text-white rounded-lg transition-colors flex items-center justify-center gap-2"
+          className="p-3 bg-baby-blue hover:bg-blue-600 text-white rounded-lg transition-colors flex items-center justify-center"
+          title="Copy Full Palette"
         >
-          <Copy size={20} />
-          Copy Full Palette
+          <Copy size={18} className="flex-shrink-0" />
         </button>
       </div>
 
