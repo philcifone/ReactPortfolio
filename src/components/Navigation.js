@@ -51,7 +51,7 @@ export const Navigation = ({ isDark, setIsDark }) => {
 
         {/* Mobile Menu */}
         <div 
-          className={`absolute top-16 left-0 right-0 bg-neutral-900/95 backdrop-blur-md shadow-lg transform transition-all duration-300 ease-in-out md:hidden ${
+          className={`absolute top-16 left-0 right-0 bg-neutral-900/80 backdrop-blur-md shadow-lg transform transition-all duration-300 ease-in-out md:hidden ${
             isMenuOpen 
               ? 'opacity-100 translate-y-0' 
               : 'opacity-0 -translate-y-full pointer-events-none'

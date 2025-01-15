@@ -206,7 +206,7 @@ const Gallery = () => {
         {/* Image Grid with transition effect */}
         <div 
           className={`
-            grid grid-cols-2 md:grid-cols-3 gap-4
+            grid grid-cols-2 md:grid-cols-3 gap-4 z-9
             transition-opacity duration-300 ease-in-out
             ${isChanging ? 'opacity-0' : 'opacity-100'}
           `}

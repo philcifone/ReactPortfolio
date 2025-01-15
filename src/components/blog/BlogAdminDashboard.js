@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Pencil, Trash2, Plus } from 'lucide-react';
+import { Pencil, Trash2, Plus, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const BlogAdminDashboard = () => {
@@ -10,53 +10,49 @@ const BlogAdminDashboard = () => {
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
 
- // Authentication error handler - keep this at the top, unchanged
-const handleAuthError = useCallback(() => {
-  localStorage.removeItem('authToken');
-  navigate('/admin/login');
-}, [navigate]);
+  // Authentication error handler
+  const handleAuthError = useCallback(() => {
+    localStorage.removeItem('authToken');
+    navigate('/admin/login');
+  }, [navigate]);
 
-// Memoize fetchPosts with useCallback
-const fetchPosts = useCallback(async () => {
-  try {
+  // Fetch posts
+  const fetchPosts = useCallback(async () => {
+    try {
       const token = localStorage.getItem('authToken');
       if (!token) {
-          handleAuthError();
-          return;
+        handleAuthError();
+        return;
       }
 
       const response = await fetch('/api/posts', {
-          headers: {
-              'Authorization': `Bearer ${token}`
-          }
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
       });
 
       if (response.status === 401) {
-          handleAuthError();
-          return;
+        handleAuthError();
+        return;
       }
 
       const data = await response.json();
-      console.log('Raw posts data:', data); // Debug log
-
-      // Process the data to ensure tags are properly formatted
       const processedData = data.map(post => ({
-          ...post,
-          tags: Array.isArray(post.tags) 
-              ? post.tags.map(tag => typeof tag === 'object' ? JSON.stringify(tag) : String(tag))
-              : []
+        ...post,
+        tags: Array.isArray(post.tags) 
+          ? post.tags.map(tag => typeof tag === 'object' ? JSON.stringify(tag) : String(tag))
+          : []
       }));
 
       setPosts(processedData);
-  } catch (error) {
+    } catch (error) {
       setMessage('Error fetching posts: ' + error.message);
-  }
-}, [handleAuthError]); // Add handleAuthError as dependency
+    }
+  }, [handleAuthError]);
 
-// Keep the useEffect in the same place
-useEffect(() => {
-  fetchPosts();
-}, [fetchPosts]);
+  useEffect(() => {
+    fetchPosts();
+  }, [fetchPosts]);
 
   const handleDelete = async (postId) => {
     if (window.confirm('Are you sure you want to delete this post?')) {
@@ -84,11 +80,9 @@ useEffect(() => {
           await fetchPosts();
         } else {
           const errorData = await response.json();
-          console.error('Delete error response:', errorData);
           setMessage(`Error deleting post: ${errorData.error || 'Unknown error'}`);
         }
       } catch (error) {
-        console.error('Delete operation error:', error);
         setMessage('Error: ' + error.message);
       }
     }
@@ -99,7 +93,6 @@ useEffect(() => {
     setIsEditing(true);
   };
 
-  // Form submission handler with authentication
   const handleFormSubmit = async (formData) => {
     try {
       const token = localStorage.getItem('authToken');
@@ -140,26 +133,66 @@ useEffect(() => {
   };
 
   return (
-    <div className="max-w-6xl mx-auto p-6 bg-neutral-800 min-h-screen">
-      <div className="flex justify-between items-center mb-8">
+    <div className="mx-auto p-4 sm:p-6 bg-neutral-800 min-h-screen">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
         <h1 className="text-3xl font-display text-gray-200">Blog Admin Dashboard</h1>
         <button
           onClick={() => setShowCreateForm(true)}
-          className="flex items-center gap-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+          className="flex items-center gap-2 bg-kelly-green hover:bg-light-olive text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors w-full sm:w-auto justify-center"
         >
           <Plus size={20} />
           New Post
         </button>
       </div>
 
+      {/* Message Alert */}
       {message && (
-        <div className="mb-4 p-4 rounded bg-blue-100 text-blue-700">
+        <div className="mb-4 p-4 rounded-lg bg-blue-100 text-blue-700">
           {message}
         </div>
       )}
 
-      {/* Posts Table */}
-      <div className="overflow-x-auto">
+      {/* Mobile Post Cards */}
+      <div className="block sm:hidden space-y-4">
+        {posts.map((post) => (
+          <div key={post.id} className="bg-neutral-700 rounded-lg p-4 space-y-3">
+            <h3 className="text-lg font-medium text-gray-200">{post.title}</h3>
+            <p className="text-sm text-gray-400">
+              {new Date(post.created_at).toLocaleDateString()}
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {post.tags.map((tag, index) => (
+                <span
+                  key={index}
+                  className="px-2 py-1 bg-neutral-600 rounded-full text-xs text-gray-300"
+                >
+                  {typeof tag === 'string' ? tag.trim() : JSON.stringify(tag)}
+                </span>
+              ))}
+            </div>
+            <div className="flex gap-2 pt-2">
+              <button
+                onClick={() => handleEdit(post)}
+                className="flex-1 flex items-center justify-center gap-2 p-2 text-blue-400 hover:bg-neutral-600 rounded-lg transition-colors"
+              >
+                <Pencil size={18} />
+                Edit
+              </button>
+              <button
+                onClick={() => handleDelete(post.id)}
+                className="flex-1 flex items-center justify-center gap-2 p-2 text-red-400 hover:bg-neutral-600 rounded-lg transition-colors"
+              >
+                <Trash2 size={18} />
+                Delete
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Desktop Table */}
+      <div className="hidden sm:block overflow-x-auto">
         <table className="w-full bg-neutral-700 rounded-lg overflow-hidden">
           <thead className="bg-neutral-600">
             <tr>
@@ -178,24 +211,14 @@ useEffect(() => {
                 </td>
                 <td className="p-4">
                   <div className="flex flex-wrap gap-2">
-                    {(() => {
-                      let tagArray;
-                      try {
-                        tagArray = typeof post.tags === 'string' 
-                          ? JSON.parse(post.tags.replace(/[\[\]"]/g, '').split(','))
-                          : post.tags;
-                      } catch (e) {
-                        tagArray = post.tags || [];
-                      }
-                      return tagArray.map((tag, index) => (
-                        <span
-                          key={index}
-                          className="px-2 py-1 bg-neutral-600 rounded-full text-sm text-gray-300"
-                        >
-                          {tag.trim()}
-                        </span>
-                      ));
-                    })()}
+                    {post.tags.map((tag, index) => (
+                      <span
+                        key={index}
+                        className="px-2 py-1 bg-neutral-600 rounded-full text-sm text-gray-300"
+                      >
+                        {typeof tag === 'string' ? tag.trim() : JSON.stringify(tag)}
+                      </span>
+                    ))}
                   </div>
                 </td>
                 <td className="p-4">
@@ -222,20 +245,37 @@ useEffect(() => {
 
       {/* Create/Edit Modal */}
       {(showCreateForm || isEditing) && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
-          <div className="bg-neutral-800 rounded-lg p-6 w-full max-w-2xl">
-            <h2 className="text-2xl font-bold mb-4 text-gray-200">
-              {isEditing ? 'Edit Post' : 'Create New Post'}
-            </h2>
-            <BlogPostForm
-              post={selectedPost}
-              onSubmit={handleFormSubmit}
-              onCancel={() => {
-                setShowCreateForm(false);
-                setIsEditing(false);
-                setSelectedPost(null);
-              }}
-            />
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 overflow-y-auto">
+          <div className="bg-neutral-800 rounded-lg w-full max-w-5xl my-8">
+            {/* Modal Header */}
+            <div className="flex justify-between items-center p-6 border-b border-neutral-700">
+              <h2 className="text-2xl font-bold text-gray-200">
+                {isEditing ? 'Edit Post' : 'Create New Post'}
+              </h2>
+              <button
+                onClick={() => {
+                  setShowCreateForm(false);
+                  setIsEditing(false);
+                  setSelectedPost(null);
+                }}
+                className="text-gray-400 hover:text-gray-300"
+              >
+                <X size={24} />
+              </button>
+            </div>
+            
+            {/* Modal Body */}
+            <div className="p-6 overflow-y-auto max-h-[calc(100vh-200px)]">
+              <BlogPostForm
+                post={selectedPost}
+                onSubmit={handleFormSubmit}
+                onCancel={() => {
+                  setShowCreateForm(false);
+                  setIsEditing(false);
+                  setSelectedPost(null);
+                }}
+              />
+            </div>
           </div>
         </div>
       )}
@@ -243,12 +283,12 @@ useEffect(() => {
   );
 };
 
-// Reuse your existing BlogPostForm component or create a new one
 const BlogPostForm = ({ post, onSubmit, onCancel }) => {
   const [formData, setFormData] = useState({
     title: post?.title || '',
     content: post?.content || '',
     excerpt: post?.excerpt || '',
+    created_at: post?.created_at ? new Date(post.created_at).toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
     tags: Array.isArray(post?.tags) 
       ? post.tags.join(', ')
       : typeof post?.tags === 'string' 
@@ -261,17 +301,13 @@ const BlogPostForm = ({ post, onSubmit, onCancel }) => {
     e.preventDefault();
     const data = new FormData();
     
-    console.log('Raw form data:', formData);
-    
     Object.keys(formData).forEach(key => {
       if (key === 'tags') {
-        // Clean and process tags
         const cleanedTags = formData[key]
           .split(',')
           .map(tag => tag.trim())
           .filter(tag => tag.length > 0)
           .join(',');
-        console.log('Processed tags:', cleanedTags);
         data.append('tags', cleanedTags);
       } else if (key === 'image' && formData[key]) {
         data.append('image', formData[key]);
@@ -300,8 +336,19 @@ const BlogPostForm = ({ post, onSubmit, onCancel }) => {
           name="title"
           value={formData.title}
           onChange={handleChange}
-          className="w-full p-2 border rounded bg-neutral-700 text-gray-200 border-gray-600"
+          className="w-full p-2 border rounded-lg bg-neutral-700 text-gray-200 border-gray-600"
           required
+        />
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium mb-2 text-gray-200">Created Date</label>
+        <input
+          type="date"
+          name="created_at"
+          value={formData.created_at}
+          onChange={handleChange}
+          className="w-full p-2 border rounded-lg bg-neutral-700 text-gray-200 border-gray-600"
         />
       </div>
 
@@ -311,7 +358,7 @@ const BlogPostForm = ({ post, onSubmit, onCancel }) => {
           name="content"
           value={formData.content}
           onChange={handleChange}
-          className="w-full p-2 border rounded h-48 bg-neutral-700 text-gray-200 border-gray-600"
+          className="w-full p-2 border rounded-lg h-48 bg-neutral-700 text-gray-200 border-gray-600"
           required
         />
       </div>
@@ -322,7 +369,7 @@ const BlogPostForm = ({ post, onSubmit, onCancel }) => {
           name="excerpt"
           value={formData.excerpt}
           onChange={handleChange}
-          className="w-full p-2 border rounded h-24 bg-neutral-700 text-gray-200 border-gray-600"
+          className="w-full p-2 border rounded-lg h-24 bg-neutral-700 text-gray-200 border-gray-600"
         />
       </div>
 
@@ -335,7 +382,7 @@ const BlogPostForm = ({ post, onSubmit, onCancel }) => {
           name="tags"
           value={formData.tags}
           onChange={handleChange}
-          className="w-full p-2 border rounded bg-neutral-700 text-gray-200 border-gray-600"
+          className="w-full p-2 border rounded-lg bg-neutral-700 text-gray-200 border-gray-600"
           placeholder="tech, tutorial, web development"
         />
       </div>
@@ -349,21 +396,21 @@ const BlogPostForm = ({ post, onSubmit, onCancel }) => {
           name="image"
           onChange={handleChange}
           accept="image/*"
-          className="w-full text-gray-200"
+          className="w-full text-gray-200 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-neutral-600 file:text-gray-200 hover:file:bg-neutral-500"
         />
       </div>
 
-      <div className="flex justify-end gap-4">
+      <div className="flex justify-end gap-4 pt-4">
         <button
           type="button"
           onClick={onCancel}
-          className="px-4 py-2 text-gray-200 hover:text-gray-100"
+          className="px-4 py-2 text-gray-200 hover:text-gray-100 bg-neutral-700 rounded-lg hover:bg-neutral-600 transition-colors"
         >
           Cancel
         </button>
         <button
           type="submit"
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+          className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
         >
           {post ? 'Update Post' : 'Create Post'}
         </button>
