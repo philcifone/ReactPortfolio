@@ -17,7 +17,7 @@ const BlogPost = ({ id, title, excerpt, date, tags, image_path }) => (
         <span>{new Date(date).toLocaleDateString()}</span>
         <div className="flex gap-2 mt-4">
           {tags.map((tag, i) => (
-            <span key={i} className="bg-gray-700 px-2 py-1 rounded-full text-xs">
+            <span key={i} className="bg-gray-700 px-2 py-1 text-center content-center rounded-full text-xs">
                 {typeof tag === 'object' ? JSON.stringify(tag) : String(tag)}
             </span>
         ))}

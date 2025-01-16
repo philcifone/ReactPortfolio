@@ -49,14 +49,6 @@ const App = () => {
             element={<AdminLogin />} 
           />
           <Route 
-            path="/admin" 
-            element={
-              <ProtectedRoute>
-                <BlogAdmin />
-              </ProtectedRoute>
-            } 
-          />
-          <Route 
             path="/admin/dashboard" 
             element={
               <ProtectedRoute>

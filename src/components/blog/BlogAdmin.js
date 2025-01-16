@@ -81,11 +81,11 @@ const BlogAdmin = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-neutral-800">
-      <h1 className="text-3xl font-display text-center mb-8 text-gray-200">Create New Blog Post</h1>
+    <div className="p-6 bg-neutral-800">
+      <h1 className="text-3xl font-display text-center text-gray-200">Create New Blog Post</h1>
       
       {message && (
-        <div className="mb-4 p-4 rounded bg-blue-100 text-blue-700">
+        <div className=" p-4 rounded bg-blue-100 text-blue-700">
           {message}
         </div>
       )}
