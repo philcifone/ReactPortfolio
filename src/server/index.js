@@ -348,10 +348,58 @@ app.put('/api/posts/:id', authenticateToken, upload.single('image'), async (req,
     }
   });
 
+// RSS Routes
+const { getRssFeed, getAtomFeed, getJsonFeed } = require('./rss');
+
+app.get('/rss.xml', async (req, res) => {
+  console.log('RSS route hit');
+  try {
+    if (!db) {
+      throw new Error('Database not connected');
+    }
+    const feed = await getRssFeed();
+    if (!feed) {
+      throw new Error('No feed generated');
+    }
+    console.log('Feed generated:', feed.substring(0, 100));  // Log first 100 chars
+    res.type('application/xml');
+    res.send(feed);
+  } catch (error) {
+    console.error('RSS generation error:', error);
+    res.status(500).send(error.message);  // Send error as text instead of JSON
+  }
+});
+
+// Atom Feed route
+app.get('/atom.xml', async (req, res) => {
+  try {
+    const feed = await getAtomFeed();
+    res.type('application/xml');
+    res.send(feed);
+  } catch (error) {
+    console.error('Atom feed generation error:', error);
+    res.status(500).json({ error: 'Failed to generate Atom feed' });
+  }
+});
+
+// JSON Feed route
+app.get('/feed.json', async (req, res) => {
+  try {
+    const feed = await getJsonFeed();
+    res.type('application/json');
+    res.send(feed);
+  } catch (error) {
+    console.error('JSON feed generation error:', error);
+    res.status(500).json({ error: 'Failed to generate JSON feed' });
+  }
+});
+
 // Handle React Router by sending all non-API routes to index.html
 app.get('/*', function(req, res) {
-  if (!req.path.startsWith('/api')) {
+  if (!req.path.startsWith('/api') && !req.path.endsWith('.xml') && !req.path.endsWith('.json')) {
     res.sendFile(path.join(__dirname, '../../public/index.html'));
+  } else {
+    res.status(404).send('Not found');
   }
 });
 
@@ -382,18 +430,6 @@ app.post('/api/login', async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
-  }
-});
-
-// RSS Route
-app.get('/rss.xml', async (req, res) => {
-  try {
-    const feed = await generateRSSFeed();
-    res.type('application/xml');
-    res.send(feed.rss2());
-  } catch (error) {
-    console.error('RSS generation error:', error);
-    res.status(500).json({ error: 'Failed to generate RSS feed' });
   }
 });
 
