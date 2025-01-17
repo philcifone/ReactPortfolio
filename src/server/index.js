@@ -1,14 +1,6 @@
 const path = require('path');
 require('dotenv').config({ path: path.resolve(__dirname, '../../.env') });
 
-// Add this right after to debug
-console.log('Current directory:', __dirname);
-console.log('Looking for .env in:', path.resolve(__dirname, '../../.env'));
-console.log('Environment variables:', {
-  JWT_SECRET: process.env.JWT_SECRET ? 'Set' : 'Not set',
-  NODE_ENV: process.env.NODE_ENV,
-});
-
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');   
@@ -17,24 +9,55 @@ const multer = require('multer');
 const db = require('./database');
 const cors = require('cors');
 
+// Add debug logging for environment
+console.log('Environment:', {
+  NODE_ENV: process.env.NODE_ENV,
+  dirname: __dirname
+});
+
 const app = express();
 
-// Middleware
-app.use(cors()); // Enable CORS for all routes
+// Define upload path based on environment
+const UPLOAD_PATH = process.env.NODE_ENV === 'production'
+  ? '/var/www/react-portfolio/uploads'
+  : path.join(__dirname, 'uploads');
+
+console.log('Using upload path:', UPLOAD_PATH);
+
+// Core Middleware
+app.use(cors());
 app.use(express.json());
-app.use('/uploads', express.static('uploads'));
 
-app.set('trust proxy', 1);
-
-// Ensure uploads directory exists
-const fs = require('fs');
-if (!fs.existsSync('uploads')) {
-    fs.mkdirSync('uploads');
-}
+// Single, consolidated upload file handler with logging
+app.use('/uploads', (req, res, next) => {
+  console.log('Image request received:', {
+    originalUrl: req.originalUrl,
+    path: req.path,
+    physicalPath: path.join(UPLOAD_PATH, req.path),
+    environment: process.env.NODE_ENV
+  });
+  next();
+}, express.static(UPLOAD_PATH));
 
 // Configure multer for file uploads
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    // Ensure upload directory exists
+    const fs = require('fs');
+    if (!fs.existsSync(UPLOAD_PATH)) {
+      fs.mkdirSync(UPLOAD_PATH, { recursive: true });
+    }
+    cb(null, UPLOAD_PATH);
+  },
+  filename: function (req, file, cb) {
+    const fileExtension = path.extname(file.originalname);
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, uniqueSuffix + fileExtension);
+  }
+});
+
 const upload = multer({ 
-  dest: 'uploads/',
+  storage: storage,
   limits: {
     fileSize: 5 * 1024 * 1024 // 5MB limit
   }
@@ -328,7 +351,7 @@ app.put('/api/posts/:id', authenticateToken, upload.single('image'), async (req,
 // Handle React Router by sending all non-API routes to index.html
 app.get('/*', function(req, res) {
   if (!req.path.startsWith('/api')) {
-    res.sendFile(path.join(__dirname, '../public/index.html'));
+    res.sendFile(path.join(__dirname, '../../public/index.html'));
   }
 });
 
@@ -359,6 +382,18 @@ app.post('/api/login', async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
+  }
+});
+
+// RSS Route
+app.get('/rss.xml', async (req, res) => {
+  try {
+    const feed = await generateRSSFeed();
+    res.type('application/xml');
+    res.send(feed.rss2());
+  } catch (error) {
+    console.error('RSS generation error:', error);
+    res.status(500).json({ error: 'Failed to generate RSS feed' });
   }
 });
 
