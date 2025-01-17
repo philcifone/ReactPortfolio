@@ -25,6 +25,7 @@ yarn-error.log*
 
 src/server/uploads/
 src/server/*.db
+src/server/*.bak
 
 src/server/scripts/
 
