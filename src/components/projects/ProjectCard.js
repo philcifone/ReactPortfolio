@@ -47,10 +47,10 @@ const ProjectCard = ({ title, description, image, tags, githubUrl, liveUrl, pdfU
               href={liveUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 text-green-400 hover:text-green-300"
+              className="inline-flex items-center gap-2 text-baby-blue hover:text-light-olive"
             >
               <ExternalLink className="w-5 h-5" />
-              <span>Live Demo</span>
+              <span>Visit Site</span>
             </a>
           )}
           {pdfUrl && (

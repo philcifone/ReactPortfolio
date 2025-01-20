@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import libaraxiaAlpha from '../../images/libaraxiaAlpha.png';
+import resilvr from "../../images/resilvr1.png"
 import backblaze from '../../images/BLZE.png';
 import ProjectCard from './ProjectCard';
 import RockPaperScissors from './RockPaperScissors';
@@ -117,9 +118,16 @@ const Work = () => {
             Featured Projects
           </h2>
           <div className="grid md:grid-cols-2 gap-8">
+          <ProjectCard
+              title="Resilvr: ZFS Storage Pool Designer"
+              description="Design and calculate ZFS storage pools with advanced features."
+              image={resilvr}
+              liveUrl="https://resilvr.com"
+              tags={["ZFS", "Storage", "Administration"]}
+            />
             <ProjectCard
               title="Libaraxia: A Self Hosted Personal Library Catalog"
-              description="A comprehensive digital preservation and catalog system for my personal library, licensed under the GPL for open source usage."
+              description="A comprehensive digital preservation and catalog system for my personal library."
               image={libaraxiaAlpha}
               githubUrl="https://github.com/philcifone/libaraxia"
               tags={["Archive", "Python", "Database Design"]}

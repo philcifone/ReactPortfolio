@@ -113,6 +113,11 @@ const ArtGenerator = () => {
     const ctx = canvas.getContext('2d');
     const cellSize = canvas.width / gridSize;
 
+    // Clear canvas and set background
+    ctx.fillStyle = '#1f2937'; // Neutral-800 background
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Draw grid
     grid.forEach((color, i) => {
       const x = (i % gridSize) * cellSize;
       const y = Math.floor(i / gridSize) * cellSize;
@@ -120,10 +125,27 @@ const ArtGenerator = () => {
       ctx.fillRect(x, y, cellSize, cellSize);
     });
 
-    const link = document.createElement('a');
-    link.download = 'art-generator.png';
-    link.href = canvas.toDataURL();
-    link.click();
+    // Get the image data
+    const dataUrl = canvas.toDataURL('image/png');
+
+    // Check if we're on iOS
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    
+    if (isIOS) {
+      // For iOS, open in new window
+      window.open(dataUrl);
+    } else {
+      try {
+        // Try the default download approach first
+        const link = document.createElement('a');
+        link.download = 'pixel-art.png';
+        link.href = dataUrl;
+        link.click();
+      } catch (e) {
+        // Fallback: open in new window
+        window.open(dataUrl);
+      }
+    }
   }, [grid, gridSize]);
 
   return (
