@@ -11,6 +11,7 @@ import HangmanGame from './Hangman';
 import CocktailFinder from './CocktailFinder';
 import ColorPaletteDemo from './ColorPalette';
 import ArtGenerator from './ArtGenerator';
+import WebPConverter from './WebPConverter';
 
 const TabButton = ({ isActive, onClick, children }) => (
   <button
@@ -50,6 +51,7 @@ const Work = () => {
 
   const utilities = [
     { id: 'colorPalette', label: 'Color Palette', component: ColorPaletteDemo },
+    { id: 'webpconvert', label: 'Webp Converter', component: WebPConverter },
     { id: 'diceware', label: 'Password Generator', component: DicewareGenerator },
     { id: 'storage', label: 'Storage Calculator', component: StorageCalculator },
     { id: 'cocktails', label: 'Cocktail Finder', component: CocktailFinder }
