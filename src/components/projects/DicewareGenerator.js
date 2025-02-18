@@ -2,6 +2,24 @@ import React, { useState, useEffect } from 'react';
 import { Copy, RefreshCw, Check, Shield } from 'lucide-react';
 import { fetchWordList } from './wordLists';
 
+// Fallback word list in case loading fails
+const FALLBACK_WORDS = {
+  4: ['cool', 'best', 'nice', 'word', 'take', 'make', 'life', 'code', 'data', 'bind'],
+  5: ['horse', 'happy', 'stack', 'power', 'cloud', 'space', 'light', 'brain', 'music', 'world'],
+  6: ['button', 'system', 'random', 'coffee', 'pencil', 'dragon', 'sunset', 'border', 'nature', 'stream'],
+  7: ['battery', 'correct', 'network', 'picture', 'rainbow', 'science', 'library', 'harmony', 'dynamic', 'channel'],
+  8: ['computer', 'platform', 'mountain', 'universe', 'creative', 'painting', 'building', 'medicine', 'sunshine', 'infinity']
+};
+
+// Leet speak transformation map
+const LEET_MAP = {
+  'a': '@',
+  'e': '3',
+  'i': '1',
+  'o': '0',
+  's': '$'
+};
+
 const DicewareGenerator = () => {
   const [wordList, setWordList] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -39,14 +57,31 @@ const DicewareGenerator = () => {
         generatePassword(combinedList, numWords);
       } catch (error) {
         console.error('Error loading word lists:', error);
+        // Fallback to built-in words if loading fails
+        const combinedList = Object.values(FALLBACK_WORDS).flat();
+        const stats = Object.entries(FALLBACK_WORDS).reduce((acc, [length, words]) => {
+          acc[length] = words.length;
+          return acc;
+        }, {});
+        stats.total = combinedList.length;
+        
+        setWordList(combinedList);
+        setWordLengthStats(stats);
+        generatePassword(combinedList, numWords);
       } finally {
         setLoading(false);
       }
     };
     loadWords();
-  }, []);
+  }, [numWords]);
 
   const rollDice = () => Math.floor(Math.random() * wordList.length);
+
+  const convertToLeetSpeak = (word) => {
+    return word.toLowerCase().split('').map(char => 
+      LEET_MAP[char] || char
+    ).join('');
+  };
 
   const generatePassword = (words = wordList, num = numWords) => {
     if (words.length === 0) return;
@@ -55,11 +90,13 @@ const DicewareGenerator = () => {
       .fill(0)
       .map(() => words[rollDice()]);
 
-    const newPassword = selectedWords.join(' ');
+    const newPassword = selectedWords
+      .map(convertToLeetSpeak)
+      .join('-');
+    
     setPassword(newPassword);
 
     // Calculate entropy (bits of randomness)
-    // Entropy = log2(pool_size) * num_words
     const bitsOfEntropy = Math.log2(words.length) * num;
     setEntropy(Math.round(bitsOfEntropy));
   };
@@ -104,7 +141,6 @@ const DicewareGenerator = () => {
       </div>
 
       <div className="space-y-6">
-        {/* Password Display */}
         <div className="bg-neutral-700 rounded-lg p-4">
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-2">
@@ -135,7 +171,6 @@ const DicewareGenerator = () => {
           </p>
         </div>
 
-        {/* Settings */}
         <div className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-200 mb-2">
@@ -151,7 +186,7 @@ const DicewareGenerator = () => {
                   }}
                   className={`flex-1 py-2 rounded-lg transition-colors ${
                     numWords === num
-                      ? 'bg-kelly-green text-white'
+                      ? 'bg-green-600 text-white'
                       : 'bg-neutral-700 text-gray-300 hover:bg-neutral-600'
                   }`}
                 >
@@ -164,8 +199,9 @@ const DicewareGenerator = () => {
           <div className="bg-neutral-700 rounded-lg p-4">
             <h4 className="text-gray-200 font-medium mb-2">About Diceware Passwords</h4>
             <p className="text-gray-400 text-sm">
-              Diceware generates passwords by randomly selecting words from a large list. 
-              These passwords are both secure and memorable. Each word adds about {Math.round(Math.log2(wordList.length))} bits 
+              This generator creates passwords by randomly selecting words from a large list
+              ({wordLengthStats.total} words) and applying character substitutions to meet special 
+              character requirements. Each word adds about {Math.round(Math.log2(wordList.length))} bits 
               of entropy to your password.
             </p>
           </div>

@@ -27,7 +27,7 @@ export const Navigation = ({ isDark, setIsDark }) => {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             {/* Logo/Name */}
-            <span className="text-2xl font-display text-light-olive">Phil Cifone</span>
+            <a href="#" className="text-2xl font-display text-light-olive hover:text-kelly-green transition-colors">Phil Cifone</a>
             
             {/* Desktop Navigation */}
             <div className="hidden md:flex text-xl items-center space-x-8 font-semibold">
