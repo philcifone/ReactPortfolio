@@ -1,15 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Copy, RefreshCw, Check, Shield } from 'lucide-react';
+import { Copy, RefreshCw, Check, Shield, Settings } from 'lucide-react';
 import { fetchWordList } from './wordLists';
-
-// Fallback word list in case loading fails
-const FALLBACK_WORDS = {
-  4: ['cool', 'best', 'nice', 'word', 'take', 'make', 'life', 'code', 'data', 'bind'],
-  5: ['horse', 'happy', 'stack', 'power', 'cloud', 'space', 'light', 'brain', 'music', 'world'],
-  6: ['button', 'system', 'random', 'coffee', 'pencil', 'dragon', 'sunset', 'border', 'nature', 'stream'],
-  7: ['battery', 'correct', 'network', 'picture', 'rainbow', 'science', 'library', 'harmony', 'dynamic', 'channel'],
-  8: ['computer', 'platform', 'mountain', 'universe', 'creative', 'painting', 'building', 'medicine', 'sunshine', 'infinity']
-};
 
 // Leet speak transformation map
 const LEET_MAP = {
@@ -17,7 +8,11 @@ const LEET_MAP = {
   'e': '3',
   'i': '1',
   'o': '0',
-  's': '$'
+  's': '$',
+  'r': '7',
+  'b': '8',
+  'g': '9',
+  'z': '2'
 };
 
 const DicewareGenerator = () => {
@@ -27,47 +22,18 @@ const DicewareGenerator = () => {
   const [numWords, setNumWords] = useState(5);
   const [copied, setCopied] = useState(false);
   const [entropy, setEntropy] = useState(0);
-  const [wordLengthStats, setWordLengthStats] = useState({});
+  const [leetProbability, setLeetProbability] = useState(0.5); // 50% chance by default
+  const [showSettings, setShowSettings] = useState(false);
 
   useEffect(() => {
     const loadWords = async () => {
       setLoading(true);
       try {
-        // Load words of different lengths
-        const words4 = await fetchWordList(4);
-        const words5 = await fetchWordList(5);
-        const words6 = await fetchWordList(6);
-        const words7 = await fetchWordList(7);
-        const words8 = await fetchWordList(8);
-        
-        const combinedList = [...words4, ...words5, ...words6, ...words7, ...words8];
-        
-        // Calculate statistics for the info panel
-        const stats = {
-          4: words4.length,
-          5: words5.length,
-          6: words6.length,
-          7: words7.length,
-          8: words8.length,
-          total: combinedList.length
-        };
-        
-        setWordList(combinedList);
-        setWordLengthStats(stats);
-        generatePassword(combinedList, numWords);
+        const words = await fetchWordList(numWords);
+        setWordList(words);
+        generatePassword(words, numWords);
       } catch (error) {
         console.error('Error loading word lists:', error);
-        // Fallback to built-in words if loading fails
-        const combinedList = Object.values(FALLBACK_WORDS).flat();
-        const stats = Object.entries(FALLBACK_WORDS).reduce((acc, [length, words]) => {
-          acc[length] = words.length;
-          return acc;
-        }, {});
-        stats.total = combinedList.length;
-        
-        setWordList(combinedList);
-        setWordLengthStats(stats);
-        generatePassword(combinedList, numWords);
       } finally {
         setLoading(false);
       }
@@ -77,10 +43,14 @@ const DicewareGenerator = () => {
 
   const rollDice = () => Math.floor(Math.random() * wordList.length);
 
+  // Enhanced convertToLeetSpeak with randomization
   const convertToLeetSpeak = (word) => {
-    return word.toLowerCase().split('').map(char => 
-      LEET_MAP[char] || char
-    ).join('');
+    return word.toLowerCase().split('').map(char => {
+      if (LEET_MAP[char] && Math.random() < leetProbability) {
+        return LEET_MAP[char];
+      }
+      return char;
+    }).join('');
   };
 
   const generatePassword = (words = wordList, num = numWords) => {
@@ -97,8 +67,10 @@ const DicewareGenerator = () => {
     setPassword(newPassword);
 
     // Calculate entropy (bits of randomness)
-    const bitsOfEntropy = Math.log2(words.length) * num;
-    setEntropy(Math.round(bitsOfEntropy));
+    // Now includes additional entropy from random leet transformations
+    const wordEntropy = Math.log2(words.length) * num;
+    const leetEntropy = selectedWords.join('').length * Math.log2(2) * leetProbability;
+    setEntropy(Math.round(wordEntropy + leetEntropy));
   };
 
   const copyToClipboard = async () => {
@@ -136,8 +108,8 @@ const DicewareGenerator = () => {
   return (
     <div className="bg-neutral-800 rounded-lg p-6">
       <div className="text-center mb-6">
-        <h3 className="text-2xl font-display text-gray-200 mb-2">Diceware Password Generator</h3>
-        <p className="text-gray-400">Generate secure, memorable passwords using the Diceware method</p>
+        <h3 className="text-2xl font-display text-gray-200 mb-2">Enhanced Diceware Generator</h3>
+        <p className="text-gray-400">Generate secure passwords with random character substitutions</p>
       </div>
 
       <div className="space-y-6">
@@ -150,6 +122,13 @@ const DicewareGenerator = () => {
               </span>
             </div>
             <div className="flex gap-2">
+              <button
+                onClick={() => setShowSettings(true)}
+                className="p-2 text-gray-400 hover:text-gray-300 transition-colors"
+                title="Settings"
+              >
+                <Settings size={16} />
+              </button>
               <button
                 onClick={() => generatePassword()}
                 className="p-2 text-gray-400 hover:text-gray-300 transition-colors"
@@ -196,13 +175,46 @@ const DicewareGenerator = () => {
             </div>
           </div>
 
+          {/* Settings Modal */}
+          {showSettings && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+              <div className="bg-neutral-700 rounded-lg p-6 max-w-sm w-full">
+                <h4 className="text-xl font-bold text-gray-200 mb-4">Settings</h4>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-gray-200 mb-2">
+                      Leet Speak Probability ({Math.round(leetProbability * 100)}%)
+                    </label>
+                    <input
+                      type="range"
+                      min="0"
+                      max="100"
+                      value={leetProbability * 100}
+                      onChange={(e) => {
+                        const newProb = Number(e.target.value) / 100;
+                        setLeetProbability(newProb);
+                        generatePassword();
+                      }}
+                      className="w-full"
+                    />
+                  </div>
+                  <button
+                    onClick={() => setShowSettings(false)}
+                    className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
           <div className="bg-neutral-700 rounded-lg p-4">
-            <h4 className="text-gray-200 font-medium mb-2">About Diceware Passwords</h4>
+            <h4 className="text-gray-200 font-medium mb-2">About Enhanced Diceware</h4>
             <p className="text-gray-400 text-sm">
-              This generator creates passwords by randomly selecting words from a large list
-              ({wordLengthStats.total} words) and applying character substitutions to meet special 
-              character requirements. Each word adds about {Math.round(Math.log2(wordList.length))} bits 
-              of entropy to your password.
+              This generator adds random character substitutions with a {Math.round(leetProbability * 100)}% probability 
+              per character. This increases entropy by making the password pattern less predictable while maintaining 
+              readability.
             </p>
           </div>
         </div>
