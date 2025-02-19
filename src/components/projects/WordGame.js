@@ -22,20 +22,69 @@ const WordGame = () => {
   useEffect(() => {
     const loadWords = async () => {
       setLoading(true);
-      const words = await fetchWordList(gameSettings.wordLength);
-      setWordList(words);
-      setLoading(false);
-      if (words.length > 0) {
-        const newWord = words[Math.floor(Math.random() * words.length)];
-        setSecretWord(newWord);
+      try {
+        const allWords = await fetchWordList();
+        // Filter words to match the current word length setting
+        const filteredWords = allWords.filter(word => word.length === gameSettings.wordLength);
+        setWordList(filteredWords);
+        
+        if (filteredWords.length > 0) {
+          const newWord = filteredWords[Math.floor(Math.random() * filteredWords.length)];
+          setSecretWord(newWord);
+        } else {
+          setMessage('No words found for current length setting');
+        }
+      } catch (error) {
+        console.error('Error loading words:', error);
+        setMessage('Error loading word list');
+      } finally {
+        setLoading(false);
       }
     };
     loadWords();
   }, [gameSettings.wordLength]);
 
+  // Helper function to count occurrences of letters in a word
+  const getLetterCount = (word) => {
+    return word.split('').reduce((acc, letter) => {
+      acc[letter] = (acc[letter] || 0) + 1;
+      return acc;
+    }, {});
+  };
+
+  // Get the status of each letter in a guess
+  const evaluateGuess = (guess, target) => {
+    const result = Array(guess.length).fill('absent');
+    const targetLetterCount = getLetterCount(target);
+    const usedIndices = new Set();
+    
+    // First pass: Mark all correct letters
+    guess.split('').forEach((letter, i) => {
+      if (letter === target[i]) {
+        result[i] = 'correct';
+        targetLetterCount[letter]--;
+        usedIndices.add(i);
+      }
+    });
+
+    // Second pass: Mark present letters, respecting remaining count
+    guess.split('').forEach((letter, i) => {
+      if (!usedIndices.has(i) && targetLetterCount[letter] > 0) {
+        result[i] = 'present';
+        targetLetterCount[letter]--;
+      }
+    });
+
+    return result;
+  };
+
   const startNewGame = () => {
-    if (wordList.length === 0) return;
-    const newWord = wordList[Math.floor(Math.random() * wordList.length)];
+    if (wordList.length === 0) {
+      setMessage('No valid words available');
+      return;
+    }
+    const filteredWords = wordList.filter(word => word.length === gameSettings.wordLength);
+    const newWord = filteredWords[Math.floor(Math.random() * filteredWords.length)];
     setSecretWord(newWord);
     setGuesses([]);
     setCurrentGuess('');
@@ -61,15 +110,30 @@ const WordGame = () => {
     return () => window.removeEventListener('keydown', handleKeyPress);
   }, [currentGuess, gameOver, gameSettings.wordLength]);
 
+  const getLetterStyle = (letter, position, guess) => {
+    if (!guess) return 'bg-neutral-700';
+    
+    const evaluation = evaluateGuess(guess, secretWord);
+    switch (evaluation[position]) {
+      case 'correct':
+        return 'bg-green-600';
+      case 'present':
+        return 'bg-yellow-600';
+      default:
+        return 'bg-neutral-600';
+    }
+  };
+
   const submitGuess = () => {
     if (currentGuess.length !== gameSettings.wordLength) {
-      setMessage('Word must be ' + gameSettings.wordLength + ' letters!');
+      setMessage(`Word must be ${gameSettings.wordLength} letters!`);
       setShake(true);
       setTimeout(() => setShake(false), 500);
       return;
     }
 
-    if (!wordList.includes(currentGuess)) {
+    const validWords = wordList.filter(word => word.length === gameSettings.wordLength);
+    if (!validWords.includes(currentGuess)) {
       setMessage('Not in word list!');
       setShake(true);
       setTimeout(() => setShake(false), 500);
@@ -79,21 +143,20 @@ const WordGame = () => {
     const newGuesses = [...guesses, currentGuess];
     setGuesses(newGuesses);
 
-    // Update used letters
+    // Update used letters with accurate evaluation
     const newUsedLetters = { ...usedLetters };
+    const evaluation = evaluateGuess(currentGuess, secretWord);
+    
     currentGuess.split('').forEach((letter, i) => {
-      if (secretWord[i] === letter) {
-        newUsedLetters[letter] = 'correct';
-      } else if (secretWord.includes(letter)) {
-        if (newUsedLetters[letter] !== 'correct') {
-          newUsedLetters[letter] = 'present';
-        }
-      } else {
-        if (!newUsedLetters[letter]) {
-          newUsedLetters[letter] = 'absent';
-        }
+      const currentStatus = evaluation[i];
+      // Only upgrade the status (absent -> present -> correct)
+      if (currentStatus === 'correct' || 
+          (currentStatus === 'present' && newUsedLetters[letter] !== 'correct') ||
+          (!newUsedLetters[letter])) {
+        newUsedLetters[letter] = currentStatus;
       }
     });
+    
     setUsedLetters(newUsedLetters);
 
     if (currentGuess === secretWord) {
@@ -107,16 +170,18 @@ const WordGame = () => {
     setCurrentGuess('');
   };
 
-  const getLetterStyle = (letter, position, guess) => {
-    if (!guess) return 'bg-neutral-700';
-    
-    if (secretWord[position] === letter) {
-      return 'bg-green-600';
+  const getKeyboardButtonStyle = (key) => {
+    const status = usedLetters[key];
+    switch (status) {
+      case 'correct':
+        return 'bg-green-600';
+      case 'present':
+        return 'bg-yellow-600';
+      case 'absent':
+        return 'bg-neutral-700';
+      default:
+        return 'bg-neutral-600';
     }
-    if (secretWord.includes(letter)) {
-      return 'bg-yellow-600';
-    }
-    return 'bg-neutral-600';
   };
 
   if (loading) {
@@ -191,11 +256,7 @@ const WordGame = () => {
           <div key={i} className="flex justify-center gap-1">
             {row.map(key => {
               const isSpecialKey = key === 'Enter' || key === '⌫';
-              const letterState = usedLetters[key];
-              let bgColor = 'bg-neutral-600';
-              if (letterState === 'correct') bgColor = 'bg-green-600';
-              if (letterState === 'present') bgColor = 'bg-yellow-600';
-              if (letterState === 'absent') bgColor = 'bg-neutral-700';
+              const buttonStyle = isSpecialKey ? 'bg-neutral-600' : getKeyboardButtonStyle(key);
 
               return (
                 <button
@@ -207,7 +268,7 @@ const WordGame = () => {
                       setCurrentGuess(prev => prev + key);
                     }
                   }}
-                  className={`${isSpecialKey ? 'px-4' : 'w-8'} h-10 ${bgColor} text-white rounded font-medium hover:opacity-90`}
+                  className={`${isSpecialKey ? 'px-4' : 'w-8'} h-10 ${buttonStyle} text-white rounded font-medium hover:opacity-90`}
                 >
                   {key}
                 </button>

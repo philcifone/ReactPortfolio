@@ -1,5 +1,5 @@
 // wordLists.js
-export const fetchWordList = async (numWords) => {
+export const fetchWordList = async () => {
   try {
     // Load all word lists (4-8) simultaneously
     const wordLengths = [4, 5, 6, 7, 8];
@@ -10,7 +10,7 @@ export const fetchWordList = async (numWords) => {
       )
     );
 
-    // Combine all words into one big pool
+    // Combine all words into one big pool, maintaining only valid words
     const allWords = responses.flatMap(text => 
       text.split('\n')
         .map(word => word.trim().toLowerCase())
