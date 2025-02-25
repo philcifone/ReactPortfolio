@@ -7,7 +7,7 @@
 src/server/node_modules
 # testing
 /coverage
-/node_modules/*
+/portfolio/node_modules/.cache/default-development/*.pack
 
 # production
 /build
