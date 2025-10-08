@@ -140,7 +140,7 @@ const Blog = () => {
                             <div className="flex justify-center mt-12">
                                 <button
                                     onClick={handleShowToggle}
-                                    className="text-kelly-green hover:text-baby-blue flex items-center gap-2 text-lg transition-colors border-b border-b-baby-blue hover:border-b-kelly-green focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-baby-blue"
+                                    className="text-kelly-green hover:text-baby-blue flex items-center gap-2 text-lg transition-colors border-b border-b-kelly-green hover:border-b-baby-blue focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-baby-blue"
                                     aria-expanded={isShowingAll ? "true" : "false"}
                                     aria-controls="blog-posts-container"
                                 >

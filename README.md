@@ -50,5 +50,4 @@ The site includes an admin dashboard for managing blog content:
 - Secure authentication system
 
 ## License
-
-All rights reserved © Phil Cifone
+ GPL v3 

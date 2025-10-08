@@ -43,6 +43,7 @@ const Work = () => {
   const [activeToolType, setActiveToolType] = useState('utilities');
   const [activeUtility, setActiveUtility] = useState('colorPalette');
   const [activeGame, setActiveGame] = useState('artGenerator');
+  const [isFunSectionOpen, setIsFunSectionOpen] = useState(false);
 
   const toolTypes = [
     { id: 'utilities', label: 'Utilities' },
@@ -117,7 +118,7 @@ const Work = () => {
         {/* Projects Section */}
         <div className="mb-24">
           <h2 className="text-4xl font-display font-bold text-center mb-16 text-gray-200">
-            Featured Projects
+            Featured Things!
           </h2>
           <div className="grid md:grid-cols-2 gap-8">
           <ProjectCard
@@ -144,15 +145,22 @@ const Work = () => {
           </div>
         </div>
 
-        {/* Interactive Tools Section */}
+{/* Interactive Tools Section */}
         <div>
-          <h2 className="text-4xl font-display text-center mb-4 text-gray-200">
-            ~ Activity Zone ~
-          </h2>
-          <p className="text-xl text-center mb-12 text-gray-400">
-          </p>
-
-          {renderInteractiveContent()}
+          <button
+            onClick={() => setIsFunSectionOpen(!isFunSectionOpen)}
+            className="w-full text-center mb-4 hover:opacity-80 transition-opacity"
+          >
+            <h2 className="text-4xl font-display p-8 text-gray-200">
+              {isFunSectionOpen ? '↑' : '↓'} This is the ~ Fun ~ Part of the Website {isFunSectionOpen ? '↑' : '↓'}
+            </h2>
+          </button>
+          
+          {isFunSectionOpen && (
+            <div className="animate-fade-in">
+              {renderInteractiveContent()}
+            </div>
+          )}
         </div>
       </div>
     </section>

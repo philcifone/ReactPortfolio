@@ -24,8 +24,8 @@ const Portfolio = ({ isDark, setIsDark }) => (
     <Navigation isDark={isDark} setIsDark={setIsDark} />
     <Hero />
     <About />
-    <Work />
     <Gallery />
+    <Work />
     <Blog />
     <Contact />
     <Footer />
@@ -47,6 +47,14 @@ const App = () => {
           <Route     
             path="/admin/login" 
             element={<AdminLogin />} 
+          />
+          <Route 
+            path="/admin" 
+            element={
+              <ProtectedRoute>
+                <BlogAdmin />
+              </ProtectedRoute>
+            } 
           />
           <Route 
             path="/admin/dashboard" 

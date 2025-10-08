@@ -23,6 +23,7 @@ const DicewareGenerator = () => {
   const [copied, setCopied] = useState(false);
   const [entropy, setEntropy] = useState(0);
   const [leetProbability, setLeetProbability] = useState(0.5);
+  const [useCapitalization, setUseCapitalization] = useState(true); // New state for capitalization
   const [showSettings, setShowSettings] = useState(false);
 
   useEffect(() => {
@@ -39,14 +40,32 @@ const DicewareGenerator = () => {
       }
     };
     loadWords();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [numWords]);
 
   const rollDice = () => Math.floor(Math.random() * wordList.length);
 
-  const convertToLeetSpeak = (word) => {
-    return word.toLowerCase().split('').map(char => {
-      if (LEET_MAP[char] && Math.random() < leetProbability) {
-        return LEET_MAP[char];
+  // Function to capitalize the first letter of a word
+  const capitalizeWord = (word) => {
+    if (!word || word.length === 0) return word;
+    return word.charAt(0).toUpperCase() + word.slice(1);
+  };
+
+  const convertToLeetSpeak = (word, capitalize) => {
+    // Start with the word - either capitalized or not
+    let processedWord = capitalize ? capitalizeWord(word) : word.toLowerCase();
+    
+    // Apply leetspeak transformations while preserving capitalization
+    return processedWord.split('').map((char, index) => {
+      // Don't apply leetspeak to the first character if capitalization is on
+      if (capitalize && index === 0) {
+        return char;
+      }
+      
+      // For other characters, apply leetspeak with the given probability
+      const lowerChar = char.toLowerCase();
+      if (LEET_MAP[lowerChar] && Math.random() < leetProbability) {
+        return LEET_MAP[lowerChar];
       }
       return char;
     }).join('');
@@ -61,7 +80,7 @@ const DicewareGenerator = () => {
     });
 
     const newPassword = selectedWords
-      .map(convertToLeetSpeak)
+      .map(word => convertToLeetSpeak(word, useCapitalization))
       .join('-');
     
     setPassword(newPassword);
@@ -196,6 +215,24 @@ const DicewareGenerator = () => {
                       className="w-full"
                     />
                   </div>
+                  
+                  {/* Add capitalization toggle */}
+                  <div className="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      id="capitalize"
+                      checked={useCapitalization}
+                      onChange={() => {
+                        setUseCapitalization(!useCapitalization);
+                        generatePassword();
+                      }}
+                      className="rounded border-gray-400 text-green-600 focus:ring-green-500"
+                    />
+                    <label htmlFor="capitalize" className="text-gray-200">
+                      Capitalize Words
+                    </label>
+                  </div>
+                  
                   <button
                     onClick={() => setShowSettings(false)}
                     className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700"
@@ -212,6 +249,7 @@ const DicewareGenerator = () => {
             <p className="text-gray-400 text-sm">
               This generator creates passwords with varying word lengths (3-8 characters) and adds random character 
               substitutions with a {Math.round(leetProbability * 100)}% probability per character.
+              {useCapitalization && " Capitalization is enabled to meet standard password requirements."}
             </p>
           </div>
         </div>
