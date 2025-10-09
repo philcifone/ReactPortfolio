@@ -142,9 +142,9 @@ const About = () => (
         <SkillCard2
           Icon={Book}
           title="Addendum"
-          description="In addition to the above, Phil is also a living, breathing, human being. He has existed 
+          description="In addition to the above, Phil is also a living, breathing, human being that has existed 
           somewhere on this planet Earth since the late 20th century, mainly in the suburban vicinity of Philadelphia, Pennsylvania, United States of America 
-          with his wife & accomplice Amanda where they read, cook, run, hike, and act as sustenance providers to their cats Carol, Pepe, and Moe."
+          with his wife & accomplice Amanda where they read, cook, run, hike, and act as caregivers to their numerous cats."
         />
       </div>
 

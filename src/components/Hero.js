@@ -18,7 +18,7 @@ const Hero = () => (
       <h1 className="font-display text-6xl md:text-8xl bg-clip-text text-transparent p-2 bg-light-olive">
         Phil Cifone
         <br/>
-        .
+        <br/>
       </h1>
       <h2 className="font-display text-4xl md:text-6xl bg-clip-text text-transparent bg-light-olive">
         Preserving Today's Creations

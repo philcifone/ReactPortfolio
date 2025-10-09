@@ -8,10 +8,13 @@ const Contact = () => (
       
       <div className="max-w-2xl mx-auto text-center space-y-8">
         <div>
-          <h3 className="text-xl font-display font-semibold text-gray-200 mb-4">Since you made it this far, shoot me an email. <br /> I'll send you a print, if you want.</h3>
+          <h3 className="text-xl font-display font-semibold text-gray-200 mb-4">Since you made it this far, shoot me an email. <br /> I'll send you a print!</h3>
           <br />
           <p className="text-gray-400 mb-6">
-            I have recently moved away from social media. Please reach out on one of these below links. Please subscribe to my RSS feed for regular blog updates!
+            I have recently moved away from social media, the best way to contact me for any reason is through email. 
+            <br/>
+            <br/> 
+            Feel free to subscribe to my RSS feed for regular blog updates!
           </p>
         </div>
         <div className="flex justify-center space-x-8">
@@ -53,7 +56,7 @@ const Footer = () => (
   <footer className="py-8 bg-neutral-800 border-t border-neutral-700">
     <div className="max-w-6xl font-display mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-400">
       <div className="mb-4">
-        <p>&copy; {new Date().getFullYear()} Phil Cifone <br></br><br></br>I have decided to share the artistic work on this website according to the terms of the Creative Commons license as described below.<br></br>This websites source code is shared according to the GPLv3 copyleft license as described below.</p><br></br>
+        <p>&copy; {new Date().getFullYear()} Phil Cifone <br></br><br></br>The artistic work created by me on this website is shared according to the terms of the Creative Commons license as described below.<br></br>This websites source code is shared according to the GPLv3 copyleft license as described below.</p><br></br>
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-4">
           <a 
             href="https://creativecommons.org/licenses/by-nc-sa/4.0/"

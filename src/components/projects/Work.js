@@ -152,7 +152,7 @@ const Work = () => {
             className="w-full text-center mb-4 hover:opacity-80 transition-opacity"
           >
             <h2 className="text-4xl font-display p-8 text-gray-200">
-              {isFunSectionOpen ? '↑' : '↓'} This is the ~ Fun ~ Part of the Website {isFunSectionOpen ? '↑' : '↓'}
+              This is the Fun Part of the Website {isFunSectionOpen ? '↑' : '↓'}
             </h2>
           </button>
           
