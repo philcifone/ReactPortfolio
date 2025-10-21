@@ -116,7 +116,7 @@ const Work = () => {
     <section id="work" className="py-20 bg-neutral-800">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Projects Section */}
-        <div className="mb-24">
+        <div className="mb-2">
           <h2 className="text-4xl font-display font-bold text-center mb-16 text-gray-200">
             Featured Things!
           </h2>
@@ -143,7 +143,9 @@ const Work = () => {
               tags={["Backups", "Archive", "Photography"]}
             />
           </div>
-        </div>
+        </div>      
+      </div>
+
 
 {/* Interactive Tools Section */}
         {/* <div>
@@ -162,7 +164,7 @@ const Work = () => {
             </div>
           )}
         </div> */}
-      </div>
+
     </section>
   );
 };
