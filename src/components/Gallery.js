@@ -96,16 +96,17 @@ const CategoryTab = ({ category, isActive, onClick }) => (
   </button>
 );
 
-const ParallaxImage = React.memo(({ src, alt, onClick, className }) => {
+const ParallaxImage = React.memo(({ src, alt, onClick, className, index }) => {
   const [offset, setOffset] = React.useState(0);
+  const [imageLoaded, setImageLoaded] = React.useState(false);
 
   React.useEffect(() => {
     const handleScroll = () => {
       const element = document.getElementById('gallery');
       if (!element) return;
-      
+
       const rect = element.getBoundingClientRect();
-      const scrollPercent = Math.max(0, Math.min(1, 
+      const scrollPercent = Math.max(0, Math.min(1,
         (window.innerHeight - rect.top) / (window.innerHeight + rect.height)
       ));
       setOffset(scrollPercent * 0); // 20px maximum parallax offset
@@ -116,15 +117,19 @@ const ParallaxImage = React.memo(({ src, alt, onClick, className }) => {
   }, []);
 
   return (
-    <div 
-      className={`overflow-hidden ${className || ''}`}
+    <div
+      className={`overflow-hidden rounded-lg cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-xl ${className || ''} ${!imageLoaded ? 'animate-pulse bg-neutral-800' : ''}`}
       onClick={onClick}
+      style={{
+        animation: `fadeInScale 0.4s ease-out ${index * 0.03}s both`
+      }}
     >
       <img
         src={src}
         alt={alt}
         className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
         style={{ transform: `translateY(${offset}px)` }}
+        onLoad={() => setImageLoaded(true)}
       />
     </div>
   );
@@ -155,12 +160,15 @@ const Gallery = () => {
 
   const handleCategoryChange = (categoryId) => {
     if (categoryId === activeCategory) return;
-    
+
     setIsChanging(true);
     setTimeout(() => {
       setActiveCategory(categoryId);
+    }, 200); // Fade out duration
+
+    setTimeout(() => {
       setIsChanging(false);
-    }, 300);
+    }, 250); // Small delay before fade in starts
   };
 
   const handleImageClick = (image, index) => {
@@ -203,21 +211,22 @@ const Gallery = () => {
           </div>
         </div>
 
-        {/* Image Grid with transition effect */}
-        <div 
+        {/* Masonry Grid with transition effect */}
+        <div
           className={`
-            grid grid-cols-2 md:grid-cols-3 gap-4
-            transition-opacity duration-300 ease-in-out
-            ${isChanging ? 'opacity-0' : 'opacity-100'}
+            columns-2 md:columns-3 gap-4 space-y-4
+            transition-all duration-200 ease-out
+            ${isChanging ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}
           `}
         >
           {galleryData[activeCategory]?.map((image, index) => (
             <ParallaxImage
-              key={index}
+              key={`${activeCategory}-${index}`}
               src={image.src}
               alt={image.alt}
               onClick={() => handleImageClick(image, index)}
-              className="aspect-square rounded-lg cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-xl"
+              className="mb-4 break-inside-avoid"
+              index={index}
             />
           ))}
         </div>
