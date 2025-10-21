@@ -20,7 +20,7 @@ const Hero = () => (
         <br/>
         <br/>
       </h1>
-      <h2 className="font-display text-4xl md:text-6xl bg-clip-text text-transparent bg-light-olive">
+      <h2 className="font-sans text-4xl md:text-4xl bg-clip-text text-transparent bg-gray-200">
         Preserving Today's Creations
       </h2>
       <p className="font-sans font-medium text-2xl text-gray-200 max-w-2xl mx-auto p-4">

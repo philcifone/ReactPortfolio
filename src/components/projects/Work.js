@@ -146,7 +146,7 @@ const Work = () => {
         </div>
 
 {/* Interactive Tools Section */}
-        <div>
+        {/* <div>
           <button
             onClick={() => setIsFunSectionOpen(!isFunSectionOpen)}
             className="w-full text-center mb-4 hover:opacity-80 transition-opacity"
@@ -161,7 +161,7 @@ const Work = () => {
               {renderInteractiveContent()}
             </div>
           )}
-        </div>
+        </div> */}
       </div>
     </section>
   );
