@@ -211,24 +211,31 @@ const Gallery = () => {
           </div>
         </div>
 
-        {/* Masonry Grid with transition effect */}
+        {/* Masonry Grid with fixed height scroll container */}
         <div
           className={`
-            columns-2 md:columns-3 gap-4 space-y-4
+            max-h-[70vh] overflow-y-auto
+            scrollbar-thin scrollbar-thumb-neutral-700 scrollbar-track-neutral-900
             transition-all duration-200 ease-out
             ${isChanging ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}
           `}
+          style={{
+            scrollbarWidth: 'thin',
+            scrollbarColor: '#404040 #171717'
+          }}
         >
-          {galleryData[activeCategory]?.map((image, index) => (
-            <ParallaxImage
-              key={`${activeCategory}-${index}`}
-              src={image.src}
-              alt={image.alt}
-              onClick={() => handleImageClick(image, index)}
-              className="mb-4 break-inside-avoid"
-              index={index}
-            />
-          ))}
+          <div className="columns-2 md:columns-3 gap-4 space-y-4">
+            {galleryData[activeCategory]?.map((image, index) => (
+              <ParallaxImage
+                key={`${activeCategory}-${index}`}
+                src={image.src}
+                alt={image.alt}
+                onClick={() => handleImageClick(image, index)}
+                className="mb-4 break-inside-avoid"
+                index={index}
+              />
+            ))}
+          </div>
         </div>
       </div>
 
